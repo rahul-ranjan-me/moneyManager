@@ -1,0 +1,51 @@
+{
+  "project_info": {
+    "project_number": "864326816799",
+    "project_id": "moneymanager-eadda"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:864326816799:android:a8d032ca67449c4d",
+        "android_client_info": {
+          "package_name": "com.moneymanager"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "864326816799-6f5tu5lt7a6vqtlqhgrafmiqubllku8o.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.moneymanager",
+            "certificate_hash": "8c5eccc480c52d358d9cfa5210831fd2b421174d"
+          }
+        },
+        {
+          "client_id": "864326816799-g201qc7au7ludvfte9eck5omc5r87n5v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDN2bmrTevgOyqCMCqR-jSBiCgn2C4yEmM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 2,
+          "analytics_property": {
+            "tracking_id": "UA-98319024-1"
+          }
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
