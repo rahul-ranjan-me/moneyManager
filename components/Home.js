@@ -29,19 +29,82 @@ export default class Home extends Component {
   constructor(props){
     super(props);
     this.showCashFlow = this.showCashFlow.bind(this);
+    this.attributesXhr = {
+			method: 'GET',
+			headers : this.props.headers,
+			body:null
+		};
+    this.accountPie = {
+      expenses: 0,
+      salary: 0,
+      otherIncome: 0
+    }
+    this.state = {
+      'accounts':[],
+      'accountPie' : {
+        expenses: 0,
+        salary: 0,
+        otherIncome: 0
+      },
+      'accountPieData': []
+    }
   }
 
   bankAccountData(account){
     return[
-        <Text style={{color:clrs.textPrimaryColor, fontSize:15}}>{account.bankName}</Text>
+        <Text style={{color:clrs.textPrimaryColor, fontSize:15}}>{account.accountNumber} ({account.accountFriendlyName})</Text>
       , <View style={styles.horizontalAlign}>
-          <Icon
-            name='rupee'
-            type='font-awesome'
-            color={clrs.textGreenColor} />
-          <Text style={{color:clrs.textGreenColor, fontSize:20, marginLeft:5, height:50}}>{account.cash}</Text>
+          <Text style={{color:clrs.textGreenColor, fontSize:20, marginLeft:5, height:50}}>£ {account.accountBalance}</Text>
         </View>
       ]
+  }
+
+  componentDidMount(){
+    fetch('https://bluebank.azure-api.net/api/v0.7/customers/'+this.props.customerInfo.id+'/accounts', this.attributesXhr)
+    .then((response) => response.json())
+			.then((responseJson) => {
+				this.setState({'accounts':responseJson.results});
+        fetch('https://bluebank.azure-api.net/api/v0.7/accounts/'+responseJson.results[0].id+'/transactions', this.attributesXhr)
+          .then((response) => response.json())
+          .then((responseJson) => {
+            responseJson.results.map((transaction)=>{
+              if(transaction.transactionAmount < 0){
+                this.accountPie.expenses += transaction.transactionAmount;
+              }else{
+                if(transaction.transactionAmount > 0 && transaction.transactionDescription === 'Salary'){
+                  this.accountPie.salary += transaction.transactionAmount;
+                }else{
+                  this.accountPie.otherIncome += transaction.transactionAmount;
+                }
+              }
+            })
+            let totalAmount = Math.abs(this.accountPie.expenses)+this.accountPie.salary+this.accountPie.otherIncome;
+            //this.state.accountPie = this.accountPie;
+            this.setState({'accountPie':this.accountPie});
+            this.setState({
+              'accountPieData' : [
+                {
+                  'name' : 'Expenses ('+ (Math.abs((this.accountPie.expenses/totalAmount)*100)).toFixed(2)+' %)',
+                  'population': Math.abs(this.accountPie.expenses)
+                },
+                {
+                  'name' : 'Salary ('+ ((this.accountPie.salary/totalAmount)*100).toFixed(2)+' %)',
+                  'population': Math.abs(this.accountPie.salary)
+                },
+                {
+                  'name' : 'Other Income ('+ ((this.accountPie.otherIncome/totalAmount)*100).toFixed(2)+' %)',
+                  'population': Math.abs(this.accountPie.otherIncome)
+                }
+              ]
+            });
+          })
+          .catch((error) => {
+            console.error(error)
+          })
+			})
+			.catch((error) => {
+				console.error(error)
+			})
   }
 
   showCashFlow(){
@@ -49,10 +112,12 @@ export default class Home extends Component {
   }
 
   render() {
-    const {totalCash, bankAccounts, cashInWallet, lastWithdrawal, upComingExpenses, totalExpenses, accountPie} = accountData;
-    const renderBankAccounts = bankAccounts.map(this.bankAccountData);
+    const {bankAccounts, cashInWallet, lastWithdrawal, upComingExpenses, totalExpenses, accountPie} = accountData;
+    const renderBankAccounts = this.state.accounts.map(this.bankAccountData);
+    let totalCash = this.state.accounts.reduce(function(acc, thisAccount) {
+      return acc + thisAccount.accountBalance;
+    }, 0);
     //const user = GoogleSignin.currentUser();
-
     return (
       <View style={styles.page}>
 
@@ -68,12 +133,14 @@ export default class Home extends Component {
           <View style={{marginLeft:5, marginBottom:-50}}>
             <View style={{flex:1, flexDirection:'column', marginTop:10}}>
               <Text style={{fontSize:20, textAlign:'center', fontWeight:'bold', color:clrs.black, width:width}}>Cash Flow</Text>
-              <Text style={{fontSize:14, textAlign:'center', color:clrs.black, width:width, marginBottom:-10}}>(April 2017)</Text>
+              <Text style={{fontSize:14, textAlign:'center', color:clrs.black, width:width, marginBottom:-10}}>(Last one year)</Text>
             </View>
-            <Pie
-              data={accountPie}
-              options={pieOptions}
-              accessorKey="population" />
+            <View style={{marginLeft:((width-350)/2)}}>
+              <Pie
+                data={this.state.accountPieData}
+                options={pieOptions}
+                accessorKey="population" />
+            </View>
           </View>
           <Grid>
             <Col size={1}>
@@ -82,15 +149,8 @@ export default class Home extends Component {
                 <Col size={4}>
                   <Text style={styles.chartLegendTitle}>Expenses</Text>
                   <Grid>
-                    <Col size={1}>
-                      <Icon
-                        name='rupee'
-                        type='font-awesome'
-                        size={20}
-                        color={clrs.black} />
-                    </Col>
-                    <Col size={4}>
-                      <Text style={styles.chartLegendText}>27000</Text>
+                    <Col>
+                      <Text style={styles.chartLegendText}>£ {Math.abs(this.state.accountPie.expenses).toFixed(2)}</Text>
                     </Col>
                   </Grid>
                 </Col>
@@ -102,15 +162,8 @@ export default class Home extends Component {
                 <Col size={4}>
                   <Text style={styles.chartLegendTitle}>Salary</Text>
                   <Grid>
-                    <Col size={1}>
-                      <Icon
-                        name='rupee'
-                        type='font-awesome'
-                        size={20}
-                        color={clrs.black} />
-                    </Col>
-                    <Col size={4}>
-                      <Text style={styles.chartLegendText}>48000</Text>
+                    <Col>
+                      <Text style={styles.chartLegendText}>£ {this.state.accountPie.salary.toFixed(2)}</Text>
                     </Col>
                   </Grid>
                 </Col>
@@ -122,15 +175,8 @@ export default class Home extends Component {
                 <Col size={4}>
                   <Text style={styles.chartLegendTitle}>Other Income</Text>
                   <Grid>
-                    <Col size={1}>
-                      <Icon
-                        name='rupee'
-                        type='font-awesome'
-                        size={20}
-                        color={clrs.black} />
-                    </Col>
-                    <Col size={4}>
-                      <Text style={styles.chartLegendText}>12000</Text>
+                    <Col>
+                      <Text style={styles.chartLegendText}>£ {this.state.accountPie.otherIncome.toFixed(2)}</Text>
                     </Col>
                   </Grid>
                 </Col>
@@ -153,11 +199,7 @@ export default class Home extends Component {
             <Col style={styles.horizontalWidget}>
               <Text style={{color:clrs.textPrimaryColor, fontSize:20, marginTop:10}}>Total Cash</Text>
               <View style={styles.horizontalAlign}>
-                <Icon
-                  name='rupee'
-                  type='font-awesome'
-                  color={clrs.textGreenColor} />
-                <Text style={{color:clrs.textGreenColor, fontSize:30, marginLeft:5, marginTop:12}}>{totalCash}</Text>
+                <Text style={{color:clrs.textGreenColor, fontSize:30, marginLeft:5, marginTop:12}}>£ {totalCash}</Text>
               </View>
             </Col> 
             <Col style={styles.horizontalRightWidget}>

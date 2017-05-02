@@ -7,7 +7,7 @@ import {
 import clrs from '../utils/Clrs';
 
 import PageMenu from './PageMenu';
-
+import TempLogin from './TempLogin';
 import Home from './Home';
 import Login from './Login';
 import CashFlow from './CashFlow';
@@ -21,16 +21,22 @@ export default class MoneyManager extends Component {
 	constructor(props) {
 		super(props);
 		this._setNavigatorRef = this._setNavigatorRef.bind(this);
+		this.setHeadersAndInfo = this.setHeadersAndInfo.bind(this);
+		this.state= {'headers': null}
+	}
+
+	setHeadersAndInfo(headers, customerInfo){
+		this.setState({'headers': headers, 'customerInfo': customerInfo});
 	}
 
 	renderScene(route, nav) {
 		switch (route.id) {
 			case 'home':
-				return <PageMenu navigator={nav}><Home navigator={nav} /></PageMenu>;
+				return <PageMenu navigator={nav}><Home navigator={nav} customerInfo={this.state.customerInfo} headers={this.state.headers}  /></PageMenu>;
 			case 'cashFlow':
-				return <PageMenu navigator={nav}><CashFlow navigator={nav} /></PageMenu>;
+				return <PageMenu navigator={nav}><CashFlow navigator={nav} customerInfo={this.state.customerInfo} headers={this.state.headers} /></PageMenu>;
 			default:
-				return <Login navigator={nav} />;
+				return <TempLogin navigator={nav} setHeadersAndInfo={this.setHeadersAndInfo} />;
 		}
 	}
 
@@ -67,7 +73,7 @@ export default class MoneyManager extends Component {
 			<Navigator
 				ref={this._setNavigatorRef}
 				initialRoute={{id: 'first'}}
-				renderScene={this.renderScene}
+				renderScene={this.renderScene.bind(this)}
 				style={{backgroundColor: clrs.darkPrimaryColor}}
 				configureScene={(route) => {
 					if (route.sceneConfig) {

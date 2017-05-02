@@ -1,7 +1,7 @@
 export default {
   margin: {
     top: 20,
-    left: 10,
+    left: 0,
     right: 20,
     bottom: 20
   },
@@ -10,7 +10,7 @@ export default {
   color: '#2980B9',
   r: 50,
   R: 150,
-  legendPosition: 'bottoLeft',
+  legendPosition: 'bottomLeft',
   animate: {
     type: 'oneByOne',
     duration: 200,

@@ -8,7 +8,6 @@ import {
 import Menu from './Menu';
 import SideMenu from 'react-native-side-menu';
 import { Icon } from 'react-native-elements'
-import {GoogleSignin} from 'react-native-google-signin';
 import clrs from '../utils/Clrs';
 
 export default class PageMenu extends Component {
@@ -34,13 +33,14 @@ export default class PageMenu extends Component {
       selectedItem: item,
     });
     if(item === 'logout'){
-      GoogleSignin.signOut()
-        .then(() => {
-          this.props.navigator.replace({ id: 'login' });
-        })
-        .catch((err) => {
-          alert('Some error occured');
-        });
+      this.props.navigator.replace({ id: 'login' });
+      // GoogleSignin.signOut()
+      //   .then(() => {
+      //     this.props.navigator.replace({ id: 'login' });
+      //   })
+      //   .catch((err) => {
+      //     alert('Some error occured');
+      //   });
     }else{
       this.props.navigator.replace({ id: item });
     }

@@ -4,6 +4,7 @@ import {
 	Text,
 	StyleSheet,
 } from 'react-native';
+import {GoogleSignin, GoogleSigninButton} from 'react-native-google-signin';
 import clrs from '../utils/Clrs';
 import { 
 	Icon, 
@@ -11,27 +12,34 @@ import {
 	ButtonGroup,
   Button,
 } from 'react-native-elements';
-import {AzureInstance, AzureLoginView} from 'react-native-azure-ad-2'
-
-const CREDENTIAILS = {
-    client_id: '0f7ef810-2f9c-424c-942a-48c6ea361d9a',
-    scope: 'User.ReadBasic.All Mail.Read'
-};
 
 export default class Login extends Component {
   constructor(props){
     super(props);
-    this.azureInstance = new AzureInstance(CREDENTIAILS);
-	this._onLoginSuccess = this._onLoginSuccess.bind(this);
+    this.signIn = this.signIn.bind(this);
   }
 
-  _onLoginSuccess(){
-    this.azureInstance.getUserInfo().then(result => {
-        console.log(result);
-    }).catch(err => {
-        console.log(err);
-    })
-}
+  signIn(){
+    this.props.navigator.replace({ id: 'home' });
+    // GoogleSignin.signIn()
+    //   .then((user) => {
+    //     this.setState({user: user});
+    //     this.props.navigator.replace({ id: 'home' });
+    //   })
+    //   .catch((err) => {
+    //     console.log('WRONG SIGNIN', err);
+    //   })
+    //   .done();
+  }
+
+  componentDidMount(){
+    
+      GoogleSignin.configure({autoResolve: true})
+      .then(() => {
+        
+      });
+    
+  }
 
   render() {
     return (
@@ -40,11 +48,15 @@ export default class Login extends Component {
           <Text style={styles.headerText}>Money Manager</Text>
         </View>
         
-        <AzureLoginView
-            azureInstance={this.azureInstance}
-            loadingMessage="Requesting access token"
-            onSuccess={this._onLoginSuccess}
-        />
+        <View style={styles.pageContent}>
+          <SocialIcon
+            title='Sign In With Google'
+            button
+            type='google-plus-official'
+            onPress={this.signIn.bind(this)}
+            style={{flex:1}}
+          />
+        </View>
       </View>
     );    
   }
