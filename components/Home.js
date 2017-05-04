@@ -60,11 +60,12 @@ export default class Home extends Component {
   }
 
   componentDidMount(){
+    console.log(this.props.accountId)
     fetch('https://bluebank.azure-api.net/api/v0.7/customers/'+this.props.customerInfo.id+'/accounts', this.attributesXhr)
     .then((response) => response.json())
 			.then((responseJson) => {
 				this.setState({'accounts':responseJson.results});
-        fetch('https://bluebank.azure-api.net/api/v0.7/accounts/'+responseJson.results[0].id+'/transactions', this.attributesXhr)
+        fetch('https://bluebank.azure-api.net/api/v0.7/accounts/'+this.props.accountId+'/transactions', this.attributesXhr)
           .then((response) => response.json())
           .then((responseJson) => {
             responseJson.results.map((transaction)=>{

@@ -14,8 +14,13 @@ import {
 import {AzureInstance, AzureLoginView} from 'react-native-azure-ad-2'
 
 const CREDENTIAILS = {
-    client_id: '0f7ef810-2f9c-424c-942a-48c6ea361d9a',
-    scope: 'User.ReadBasic.All Mail.Read'
+    "client_id": "0f7ef810-2f9c-424c-942a-48c6ea361d9a",
+    "client_secret": "",
+    "authorize_uri": "https://login.microsoftonline.com/bluebankb2c.onmicrosoft.com/oauth2/v2.0/authorize",
+    "token_uri": "https://login.microsoftonline.com/bluebankb2c.onmicrosoft.com/oauth2/v2.0/token?p=B2C_1_BlueBankSUSI",
+    "redirect_uris": ["urn:ietf:wg:oauth:2.0:oob"],
+    "scope": "User.ReadBasic.All Mail.Read",
+    "keychain": true,
 };
 
 export default class Login extends Component {
@@ -33,6 +38,10 @@ export default class Login extends Component {
     })
 }
 
+_onError(err){
+    console.log(err)
+  }
+
   render() {
     return (
       <View style={styles.page}>
@@ -44,6 +53,7 @@ export default class Login extends Component {
             azureInstance={this.azureInstance}
             loadingMessage="Requesting access token"
             onSuccess={this._onLoginSuccess}
+            onError={this._onError.bind(this)}
         />
       </View>
     );    

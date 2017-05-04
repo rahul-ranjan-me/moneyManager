@@ -8,6 +8,8 @@ import clrs from '../utils/Clrs';
 
 import PageMenu from './PageMenu';
 import TempLogin from './TempLogin';
+
+import Accounts from './Accounts';
 import Home from './Home';
 import Login from './Login';
 import CashFlow from './CashFlow';
@@ -29,10 +31,17 @@ export default class MoneyManager extends Component {
 		this.setState({'headers': headers, 'customerInfo': customerInfo});
 	}
 
+	setAccountId(id){
+		console.log('app');
+		this.setState({'accountId': id});
+	}
+
 	renderScene(route, nav) {
 		switch (route.id) {
 			case 'home':
-				return <PageMenu navigator={nav}><Home navigator={nav} customerInfo={this.state.customerInfo} headers={this.state.headers}  /></PageMenu>;
+				return <PageMenu navigator={nav}><Accounts navigator={nav} customerInfo={this.state.customerInfo} headers={this.state.headers} setAccountId={this.setAccountId.bind(this)} /></PageMenu>;
+			case 'accounts':
+				return <PageMenu navigator={nav}><Home navigator={nav} accountId={this.state.accountId} customerInfo={this.state.customerInfo} headers={this.state.headers}  /></PageMenu>;
 			case 'cashFlow':
 				return <PageMenu navigator={nav}><CashFlow navigator={nav} customerInfo={this.state.customerInfo} headers={this.state.headers} /></PageMenu>;
 			default:

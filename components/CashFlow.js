@@ -107,32 +107,14 @@ export default class CashFlow extends Component {
               <Col>
                 <Text style={{fontSize:20}}>Income</Text>
                 <Grid>
-                  <Col size={1}>
-                    <Icon
-                    name='rupee'
-                    type='font-awesome'
-                    size={30}
-                    color={clrs.linkButtonColor} />
-                  </Col>
-                  <Col size={7}>
-                    <Text style={{fontSize:24, fontWeight:'bold', color:clrs.linkButtonColor}}>{income}</Text>
-                  </Col>
+                  <Text style={{fontSize:24, fontWeight:'bold', color:clrs.linkButtonColor}}>£ {income}</Text>
                 </Grid>
               </Col>
               <Col>
                 <View style={{borderLeftColor:'#333', paddingLeft:15, borderLeftWidth:1, borderStyle:'dotted'}}>
                   <Text style={{fontSize:20}}>Expense</Text>
                   <Grid>
-                    <Col size={1}>
-                      <Icon
-                      name='rupee'
-                      type='font-awesome'
-                      size={30}
-                      color={clrs.expenseColor} />
-                    </Col>
-                    <Col size={7}>
-                      <Text style={{fontSize:24, fontWeight:'bold', color:clrs.expenseColor}}>{expense}</Text>
-                    </Col>
+                    <Text style={{fontSize:24, fontWeight:'bold', color:clrs.expenseColor}}>£ {expense}</Text>
                   </Grid>
                 </View>
               </Col>
