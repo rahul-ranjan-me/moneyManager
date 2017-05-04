@@ -85,6 +85,7 @@ export default class Accounts extends Component{
 
 const styles = StyleSheet.create({
 	page: {
-		backgroundColor: clrs.pageBackgroundColor
+		backgroundColor: clrs.pageBackgroundColor,
+    flex:1,
 	},
 })

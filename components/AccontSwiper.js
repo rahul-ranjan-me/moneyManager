@@ -31,11 +31,16 @@ export default class Header extends Component{
   }
 
   render(){
-    return <Swiper style={styles.wrapper}>
+    return (
+      <View style={{flex:1, backgroundColor:clrs.pageBackgroundColor}}>
+          {this.state.accountsInfo.length > 0 ? <Swiper style={styles.wrapper}>
+        
               {this.state.accountsInfo.map((item, i) => (
                 <SlideItem item={item} key={i} navigator={this.props.navigator} setAccountId={this.setAccountId.bind(this)} />
               ))}
-            </Swiper>
+            </Swiper> : null}
+      </View>
+    )
   }
 }
 
@@ -96,25 +101,7 @@ export class SlideItem extends Component{
 }
 
 const styles = StyleSheet.create({
-  container:{
-    backgroundColor:clrs.widgetBackgroundColor,
-    padding:15,
-    marginTop:1,
-  },
-  textInfo:{
-    color:clrs.textPrimaryColor,
-    fontSize:13,
-    marginBottom:10
-  },
-  combineBalanceLabel:{
-    color:clrs.textPrimaryColor,
-    fontSize:18,
-  },
-  combineBalance:{
-    color:clrs.textGreenColor,
-    fontSize:20,
-    marginLeft:20
-  },
+  wrapper:{},
   slide: {
     flex:1,
     backgroundColor: '#97CAE5',
