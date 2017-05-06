@@ -13,11 +13,12 @@ import {
 	FormInput,
 	FormLabel
 } from 'react-native-elements';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 export default class TempLogin extends Component {
   constructor(props){
     super(props);
-		this.state = {'jwtToken': null, 'subscriptionKey': null};
+		this.state = {'jwtToken': null, 'subscriptionKey': null, visible:false};
   }
 
 	setJwtToken(token){
@@ -29,7 +30,8 @@ export default class TempLogin extends Component {
 	}
 
 	updateStorage(){
-		this.state.jwtToken = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6Ilg1ZVhrNHh5b2pORnVtMWtsMll0djhkbE5QNC1jNTdkTzZRR1RWQndhTmsifQ.eyJleHAiOjE0OTQwOTI0MzYsIm5iZiI6MTQ5NDA4ODgzNiwidmVyIjoiMS4wIiwiaXNzIjoiaHR0cHM6Ly9sb2dpbi5taWNyb3NvZnRvbmxpbmUuY29tL2Q1Zjg1NjgyLWY2N2EtNDQ0NC05MzY5LTJjNWVjMWEwZThjZC92Mi4wLyIsInN1YiI6IjQ4YmQzMzVkLTU2OTEtNDA0Ni04NDM4LTJiOTFjY2Y2NWVkNSIsImF1ZCI6IjBmN2VmODEwLTJmOWMtNDI0Yy05NDJhLTQ4YzZlYTM2MWQ5YSIsIm5vbmNlIjoiZGVmYXVsdE5vbmNlICIsImlhdCI6MTQ5NDA4ODgzNiwiYXV0aF90aW1lIjoxNDk0MDg4ODM2LCJvaWQiOiI0OGJkMzM1ZC01NjkxLTQwNDYtODQzOC0yYjkxY2NmNjVlZDUiLCJuYW1lIjoiUmFodWwiLCJmYW1pbHlfbmFtZSI6IlJhbmphbiIsImdpdmVuX25hbWUiOiJSYWh1bCBSYW5qYW4iLCJlbWFpbHMiOlsicmFodWwucmFuamFuQHJicy5jb20iXSwidGZwIjoiQjJDXzFfQmx1ZUJhbmtTVVNJIn0.H_RNzFm9jBlWlS4ovyx2uuB_0rQJHCBqXi0CM3lgpP_SE26Kw8pDyRauklunVUgW6w08jldfFrTXGz-DEq75UVPCiG9Gd26Ed178tE8gb4Oh3oNXie04BkOIT4HkZrAu5eD-TCK7wDmo9NohVt4Y2-kvaPZsNpsTVcHh9HpUFDkloIrAKTz9Tnr3tibpCBY7wH2lbe5-TwTR2EejxxWj68GfMmGthVLJCFL9tztK-vW6rCR8drOLCbYrOgCfp2UK8wamA4fVIXiUWuyBFVEE1yS530fEr8tdWmLdIDvyH0aXdwj4-zk4MJFEXePQ9o5jBH_O5_SdgnrT7ydqF9xrOA';
+		this.setState({'visible':true});
+		this.state.jwtToken = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6Ilg1ZVhrNHh5b2pORnVtMWtsMll0djhkbE5QNC1jNTdkTzZRR1RWQndhTmsifQ.eyJleHAiOjE0OTQwOTQzODEsIm5iZiI6MTQ5NDA5MDc4MSwidmVyIjoiMS4wIiwiaXNzIjoiaHR0cHM6Ly9sb2dpbi5taWNyb3NvZnRvbmxpbmUuY29tL2Q1Zjg1NjgyLWY2N2EtNDQ0NC05MzY5LTJjNWVjMWEwZThjZC92Mi4wLyIsInN1YiI6IjQ4YmQzMzVkLTU2OTEtNDA0Ni04NDM4LTJiOTFjY2Y2NWVkNSIsImF1ZCI6IjBmN2VmODEwLTJmOWMtNDI0Yy05NDJhLTQ4YzZlYTM2MWQ5YSIsIm5vbmNlIjoiZGVmYXVsdE5vbmNlICIsImlhdCI6MTQ5NDA5MDc4MSwiYXV0aF90aW1lIjoxNDk0MDkwNzgxLCJvaWQiOiI0OGJkMzM1ZC01NjkxLTQwNDYtODQzOC0yYjkxY2NmNjVlZDUiLCJuYW1lIjoiUmFodWwiLCJmYW1pbHlfbmFtZSI6IlJhbmphbiIsImdpdmVuX25hbWUiOiJSYWh1bCBSYW5qYW4iLCJlbWFpbHMiOlsicmFodWwucmFuamFuQHJicy5jb20iXSwidGZwIjoiQjJDXzFfQmx1ZUJhbmtTVVNJIn0.m-rUPNEF3r3x8yuFqN46_Y824KUJ6nFtVr6I2VlCxFhsoEvNo-Yb1ql_msb5jp_kBPrnCa7CN-PoR5jKJGFuGyvs28RZxnTNjBLBqlKLu1AgvmbJknCOEB6G9KxAqqJDzBZ3KnlBtNTq6xulEsoh7RRqs8PPeKfsQjOEad_ZbRKXBstyZVLl8kBCxpGeQjgOjX-5wjiBxymzsVgIuv4cpCVzTo97aVyRPtYkU6XGnGk_Tqx_M1eAKrTe0_BhDXRUomOlbVFIHJfjBa77ZqZLsacXrACRxtfDyVyzEyNYBhRdzcUwOisEPW8-nexNTbLUiSdq5wfs1xKn6L-rprYWOQ';
 		this.state.subscriptionKey = '945965cd002045d497995b94115e65f1';
 
 		const headers = {
@@ -43,9 +45,8 @@ export default class TempLogin extends Component {
 			body:null
 		}).then((response) => response.json())
 			.then((responseJson) => {
-				console.log(responseJson)
 				this.props.setHeadersAndInfo(headers, responseJson.results[0]);
-				this.props.navigator.replace({ id: 'aggregatedCashFlow' });
+				this.props.navigator.replace({ id: 'home' });
 			})
 			.catch((error) => {
 				alert('Error occured, please check subscription key or jwt token');
@@ -75,6 +76,8 @@ export default class TempLogin extends Component {
 						onPress={this.updateStorage.bind(this)}
 						title='Login' />
 				</View>
+
+				<Spinner visible={this.state.visible} textContent={"loggin in..."} textStyle={{color: clrs.textPrimaryColor}} overlayColor={clrs.overlayColor} />
       </View>
     );    
   }

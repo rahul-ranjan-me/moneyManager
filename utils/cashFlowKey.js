@@ -55,28 +55,40 @@ const categoryCashFlow = {
 
 const labels = {
     salary:{
-        label: 'Salary'
+        label: 'Salary',
+        icon:'credit-card'
     },
     standingOrders:{
-        label: 'Standing Orders'
+        label: 'Standing Orders',
+        icon:'first-order'
     },
     insurance:{
-        label:'Insurance'
+        label:'Insurance',
+        icon:'life-ring'
     },
     mobile:{
-        label: 'Mobile or Internet'
+        label: 'Mobile or Internet',
+        icon:'mobile'
     },
     atm:{
-        label:'ATM Withdrawal'
+        label:'ATM Withdrawal',
+        icon:'institution'
     },
     groceries: {
-        label: 'Groceries'
+        label: 'Groceries',
+        icon:'cutlery'
     },
     clothings:{
-        label: 'Clothings'
+        label: 'Clothings',
+        icon: 'cogs'
     },
     directBanking:{
-        label: 'Direct Banking'
+        label: 'Direct Banking',
+        icon:'bank'
+    },
+    others:{
+        label: 'Others',
+        icon:'money'
     }
 }
 

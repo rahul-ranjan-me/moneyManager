@@ -46,7 +46,7 @@ export default class MoneyManager extends Component {
 			case 'accounts':
 				return <PageMenu navigator={nav}><Home navigator={nav} accountId={this.state.accountId} setTransactions={this.setTransactions.bind(this)} customerInfo={this.state.customerInfo} headers={this.state.headers}  /></PageMenu>;
 			case 'cashFlow':
-				return <PageMenu navigator={nav}><CashFlow navigator={nav} transactions={this.state.transactions} customerInfo={this.state.customerInfo} headers={this.state.headers} /></PageMenu>;
+				return <PageMenu navigator={nav}><CashFlow navigator={nav} accountId={this.state.accountId} transactions={this.state.transactions} customerInfo={this.state.customerInfo} headers={this.state.headers} /></PageMenu>;
 			case 'aggregatedCashFlow':
 				return <PageMenu navigator={nav}><CashFlow navigator={nav} transactions={null} customerInfo={this.state.customerInfo} headers={this.state.headers} /></PageMenu>;
 			default:

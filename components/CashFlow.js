@@ -21,6 +21,7 @@ import {
 } from 'react-native-elements';
 import {GoogleSignin} from 'react-native-google-signin';
 import {labels, categoryCashFlow} from '../utils/cashFlowKey'
+import Spinner from 'react-native-loading-spinner-overlay';
 
 const calcTransactions = (transactions) => {
   let data = {
@@ -41,7 +42,7 @@ const calcTransactions = (transactions) => {
       data[category1stLevel][category2ndLevel] = {
           label:label.label,
           amount:tran.transactionAmount,
-          icon:'credit-card'
+          icon:label.icon
       }
     }
   };
@@ -106,7 +107,6 @@ const calcTransactions = (transactions) => {
   for(var i in data.expenseData){
     data.expenseArrData.push(data.expenseData[i]);
   }
-
   return data;
 }
 
@@ -123,7 +123,8 @@ export default class CashFlow extends Component {
         expense: 0,
         incomeArrData:[],
         expenseArrData:[]
-      }
+      },
+      visible: false
     };
     this.attributesXhr = {
 			method: 'GET',
@@ -142,7 +143,7 @@ export default class CashFlow extends Component {
         .then((responseJson) => {
           this.transactionCalculatedData = this.transactionCalculatedData.concat(responseJson.results);
           if(this.currentCursor === this.totalAccounts-1){
-            this.setState({transactionData: calcTransactions(this.transactionCalculatedData)});
+            this.setState({transactionData: calcTransactions(this.transactionCalculatedData), visible: false, subtitle: 'Aggregated last year view...'});
           }else{
             this.currentCursor += 1;
             this.calcTransactionPromise(allAccounts);
@@ -156,8 +157,9 @@ export default class CashFlow extends Component {
   }
 
   componentDidMount(){
+    this.setState({visible:true});
     if(this.props.transactions){
-      this.setState({transactionData: calcTransactions(this.props.transactions.results)})
+      this.setState({transactionData: calcTransactions(this.props.transactions.results), visible:false, subtitle: 'Last year...'})
     }else{
       var transactionsCalc = [];
       fetch('https://bluebank.azure-api.net/api/v0.7/customers/'+this.props.customerInfo.id+'/accounts', this.attributesXhr)
@@ -166,8 +168,6 @@ export default class CashFlow extends Component {
           const allAccounts = responseJson.results;
           this.totalAccounts = allAccounts.length;
           this.calcTransactionPromise(allAccounts)
-
-
         })
         .catch((error) => {
           console.error(error)
@@ -244,8 +244,8 @@ export default class CashFlow extends Component {
             style={{width: 50, height: 50, borderRadius:10, position:'absolute', right:10, top:5}}
             source={{uri: user.photo}}
           />*/}
-          <Text style={styles.headerText}>Cash flow</Text>
-          <Text>(Apr 2017)</Text>
+          <Text style={styles.headerText}>Cashflow</Text>
+          <Text>({this.state.subtitle})</Text>
         </View>
 
         <ScrollView>
@@ -275,7 +275,7 @@ export default class CashFlow extends Component {
             <Text style={styles.footerText}>All rights reserved</Text>
           </View>
         </ScrollView>
-
+        <Spinner visible={this.state.visible} textContent={"Fetching cashflow ..."} textStyle={{color: clrs.textPrimaryColor}} overlayColor={clrs.overlayColor} />
       </View>
     );    
   }

@@ -22,6 +22,7 @@ import {
 import {Pie} from 'react-native-pathjs-charts';
 import pieOptions from '../utils/DashboardPie';
 import {GoogleSignin} from 'react-native-google-signin';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 const {height, width} = Dimensions.get('window');
 
@@ -60,6 +61,7 @@ export default class Home extends Component {
   }
 
   componentDidMount(){
+    this.setState({visible:true});
     fetch('https://bluebank.azure-api.net/api/v0.7/customers/'+this.props.customerInfo.id+'/accounts', this.attributesXhr)
     .then((response) => response.json())
 			.then((responseJson) => {
@@ -98,6 +100,7 @@ export default class Home extends Component {
                 }
               ]
             });
+            this.setState({visible:false});
           })
           .catch((error) => {
             console.error(error)
@@ -263,7 +266,7 @@ export default class Home extends Component {
             <Text style={styles.footerText}>All rights reserved</Text>
           </View>
         </ScrollView>
-
+        <Spinner visible={this.state.visible} textContent={"Loading account ..."} textStyle={{color: clrs.textPrimaryColor}} overlayColor={clrs.overlayColor} />
       </View>
     );    
   }

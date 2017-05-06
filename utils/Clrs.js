@@ -13,5 +13,6 @@ export default {
   textGreenColor:'#4CAF50',
   chartLegendTitle:'#AD1457',
   linkButtonColor:'#397af8',
-  expenseColor:'#EF6C00'
+  expenseColor:'#EF6C00',
+  overlayColor: 'rgba(60, 20, 95, .25)'
 }
