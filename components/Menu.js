@@ -19,10 +19,10 @@ const list = [
 		key: 'home',
 	},
 	{
-		name: 'Cash flow',
+		name: 'Agreegated Cash flow',
 		icon: 'av-timer',
 		subtitle: 'Click to see latest cash flow',
-		key: 'cashFlow',
+		key: 'aggregatedCashFlow',
 	},
 	{
 		name: 'USD',

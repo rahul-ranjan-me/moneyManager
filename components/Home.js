@@ -54,13 +54,12 @@ export default class Home extends Component {
     return[
         <Text style={{color:clrs.textPrimaryColor, fontSize:15}}>{account.accountNumber} ({account.accountFriendlyName})</Text>
       , <View style={styles.horizontalAlign}>
-          <Text style={{color:clrs.textGreenColor, fontSize:20, marginLeft:5, height:50}}>£ {account.accountBalance}</Text>
+          <Text style={{color:clrs.textGreenColor, fontSize:20, marginLeft:5,}}>£ {account.accountBalance}</Text>
         </View>
       ]
   }
 
   componentDidMount(){
-    console.log(this.props.accountId)
     fetch('https://bluebank.azure-api.net/api/v0.7/customers/'+this.props.customerInfo.id+'/accounts', this.attributesXhr)
     .then((response) => response.json())
 			.then((responseJson) => {
@@ -68,6 +67,7 @@ export default class Home extends Component {
         fetch('https://bluebank.azure-api.net/api/v0.7/accounts/'+this.props.accountId+'/transactions', this.attributesXhr)
           .then((response) => response.json())
           .then((responseJson) => {
+            this.props.setTransactions(responseJson);
             responseJson.results.map((transaction)=>{
               if(transaction.transactionAmount < 0){
                 this.accountPie.expenses += transaction.transactionAmount;
@@ -245,11 +245,7 @@ export default class Home extends Component {
             <Col style={styles.horizontalWidget}>
               <Text style={{color:clrs.textPrimaryColor, fontSize:20, marginTop:10}}>Upcoming expenses</Text>
               <View style={styles.horizontalAlign}>
-                <Icon
-                  name='rupee'
-                  type='font-awesome'
-                  color={clrs.textGreenColor} />
-                <Text style={{color:clrs.textGreenColor, fontSize:30, marginLeft:5, marginTop:12}}>{upComingExpenses}</Text>
+                <Text style={{color:clrs.textGreenColor, fontSize:30, marginLeft:5, marginTop:12}}>£ {upComingExpenses}</Text>
               </View>
             </Col> 
             <Col size={5}>
@@ -306,7 +302,6 @@ const styles = StyleSheet.create({
     padding:10,
     margin:10,
     marginBottom:0,
-    height:140,
     flexDirection:'row'
   },
   verticalWidgetContainerNoHeight:{

@@ -20,12 +20,159 @@ import {
   Divider,
 } from 'react-native-elements';
 import {GoogleSignin} from 'react-native-google-signin';
+import {labels, categoryCashFlow} from '../utils/cashFlowKey'
+
+const calcTransactions = (transactions) => {
+  let data = {
+    incomeData : {},
+    expenseData : {},
+    income: 0,
+    expense: 0,
+    incomeArrData:[],
+    expenseArrData:[]
+  }
+  const unclassified = (category1stLevel, category2ndLevel, label, tran) => {
+
+    tran.transactionAmount > 0 ? data.income += tran.transactionAmount : data.expense += Math.abs(tran.transactionAmount);
+
+    if(data[category1stLevel][category2ndLevel]){
+      data[category1stLevel][category2ndLevel].amount += Math.abs(tran.transactionAmount);
+    }else{
+      data[category1stLevel][category2ndLevel] = {
+          label:label.label,
+          amount:tran.transactionAmount,
+          icon:'credit-card'
+      }
+    }
+  };
+
+  transactions.forEach((tran) => {
+    
+    if(!tran.transactionType){    
+      if(tran.transactionAmount > 0){
+        if(data.incomeData['salary']){
+          data.incomeData['salary'].amount += tran.transactionAmount;
+        }else{
+          data.incomeData['salary'] = {
+            label: labels['salary'].label.label,
+            amount:tran.transactionAmount,
+            icon:'credit-card'
+          }
+        }
+        data.income += tran.transactionAmount;
+      }
+    }else{
+      const is2ndLevel = categoryCashFlow[tran.transactionType].is2ndLevel;
+      
+      if(!tran.transactionType){
+        unclassified('incomeData', 'salary', 'Salary', tran);
+        return;
+      }
+
+      if(!categoryCashFlow[tran.transactionType]){
+        tran.transactionAmount > 0 ? unclassified('incomeData', 'others', 'Other Income', tran) : unclassified('expenseData', 'others', 'Other Expense', tran);
+      }else{
+        let category2ndLevel = '',
+            category1stLevel = tran.transactionAmount > 0 ? 'incomeData' : 'expenseData';
+        if(is2ndLevel){
+          if(!categoryCashFlow[tran.transactionType][tran.transactionDescription]){
+            category2ndLevel = 'others';  
+            labels[category2ndLevel] = category1stLevel === 'incomeData' ? 'Other Income' : 'Other Expense';
+          }else{
+            category2ndLevel = categoryCashFlow[tran.transactionType][tran.transactionDescription].category;
+          }
+        }else{
+           if(!categoryCashFlow[tran.transactionType]){
+            category2ndLevel = 'others';  
+            labels[category2ndLevel] = category1stLevel === 'incomeData' ? 'Other Income' : 'Other Expense';
+          }else{
+            category2ndLevel = categoryCashFlow[tran.transactionType].category;
+          }
+
+          
+        }
+        unclassified(category1stLevel, category2ndLevel, labels[category2ndLevel], tran);
+      }
+      
+
+    }
+
+  });
+  
+  for(var i in data.incomeData){
+    data.incomeArrData.push(data.incomeData[i]);
+  }
+
+  for(var i in data.expenseData){
+    data.expenseArrData.push(data.expenseData[i]);
+  }
+
+  return data;
+}
 
 const {height, width} = Dimensions.get('window');
 
 export default class CashFlow extends Component {
   constructor(props){
     super(props);
+    this.state = {
+      transactionData : {
+        incomeData : {},
+        expenseData : {},
+        income: 0,
+        expense: 0,
+        incomeArrData:[],
+        expenseArrData:[]
+      }
+    };
+    this.attributesXhr = {
+			method: 'GET',
+			headers : this.props.headers,
+			body:null
+		};
+    this.totalAccounts = 0;
+    this.currentCursor = 0;
+    this.transactionCalculatedData = [];
+  }
+
+  calcTransactionPromise(allAccounts){
+    if(this.currentCursor < this.totalAccounts){
+      fetch('https://bluebank.azure-api.net/api/v0.7/accounts/'+allAccounts[this.currentCursor].id+'/transactions', this.attributesXhr)
+      .then((response) => response.json())
+        .then((responseJson) => {
+          this.transactionCalculatedData = this.transactionCalculatedData.concat(responseJson.results);
+          if(this.currentCursor === this.totalAccounts-1){
+            this.setState({transactionData: calcTransactions(this.transactionCalculatedData)});
+          }else{
+            this.currentCursor += 1;
+            this.calcTransactionPromise(allAccounts);
+          }
+          
+        })
+        .catch((error) => {
+          console.error(error)
+        })
+    }
+  }
+
+  componentDidMount(){
+    if(this.props.transactions){
+      this.setState({transactionData: calcTransactions(this.props.transactions.results)})
+    }else{
+      var transactionsCalc = [];
+      fetch('https://bluebank.azure-api.net/api/v0.7/customers/'+this.props.customerInfo.id+'/accounts', this.attributesXhr)
+      .then((response) => response.json())
+        .then((responseJson) => {
+          const allAccounts = responseJson.results;
+          this.totalAccounts = allAccounts.length;
+          this.calcTransactionPromise(allAccounts)
+
+
+        })
+        .catch((error) => {
+          console.error(error)
+        })
+    }
   }
 
   calcBiggestHeight(array1, array2){
@@ -41,7 +188,7 @@ export default class CashFlow extends Component {
 
   createIncomeChart(data, type, biggestItem){
     const totalWidth = parseInt(data.amount)/biggestItem*100
-      adjustedWidth = (Math.round(width*totalWidth/100))*70/100,
+      adjustedWidth = ((Math.round(width*totalWidth/100))*70/100)+30,
       color = type === 'income'? clrs.linkButtonColor : clrs.expenseColor;
 
     return [
@@ -68,7 +215,7 @@ export default class CashFlow extends Component {
                   </Col>
                   <Col>
                     <View style={{marginTop:-10, marginLeft:5}}>
-                      <Text style={{fontSize:20, color:color}}>{data.amount}</Text>
+                      <Text style={{fontSize:20, color:color}}>{data.amount.toFixed(2)}</Text>
                       <Text style={{fontWeight:'bold'}}>{data.label}</Text>
                     </View>
                   </Col>
@@ -83,10 +230,10 @@ export default class CashFlow extends Component {
   }
 
   render() {
-    const {income, expense, incomeData, expenseData} = cashFlowData;
-    const biggestItem = this.calcBiggestHeight(incomeData, expenseData);
-    const incomeChart = incomeData.map((data) => this.createIncomeChart(data, 'income', biggestItem))
-    const expenseChart = expenseData.map((data) => this.createIncomeChart(data, 'expense', biggestItem))
+    const {income, expense, incomeArrData, expenseArrData} = this.state.transactionData;
+    const biggestItem = this.calcBiggestHeight(incomeArrData, expenseArrData);
+    const incomeChart = incomeArrData.map((data) => this.createIncomeChart(data, 'income', biggestItem))
+    const expenseChart = expenseArrData.map((data) => this.createIncomeChart(data, 'expense', biggestItem))
     //const user = GoogleSignin.currentUser();
 
     return (
@@ -107,14 +254,14 @@ export default class CashFlow extends Component {
               <Col>
                 <Text style={{fontSize:20}}>Income</Text>
                 <Grid>
-                  <Text style={{fontSize:24, fontWeight:'bold', color:clrs.linkButtonColor}}>£ {income}</Text>
+                  <Text style={{fontSize:24, fontWeight:'bold', color:clrs.linkButtonColor}}>£ {income.toFixed(2)}</Text>
                 </Grid>
               </Col>
               <Col>
                 <View style={{borderLeftColor:'#333', paddingLeft:15, borderLeftWidth:1, borderStyle:'dotted'}}>
                   <Text style={{fontSize:20}}>Expense</Text>
                   <Grid>
-                    <Text style={{fontSize:24, fontWeight:'bold', color:clrs.expenseColor}}>£ {expense}</Text>
+                    <Text style={{fontSize:24, fontWeight:'bold', color:clrs.expenseColor}}>£ {expense.toFixed(2)}</Text>
                   </Grid>
                 </View>
               </Col>

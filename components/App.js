@@ -32,8 +32,11 @@ export default class MoneyManager extends Component {
 	}
 
 	setAccountId(id){
-		console.log('app');
 		this.setState({'accountId': id});
+	}
+
+	setTransactions(transactions){
+		this.setState({transactions, transactions})
 	}
 
 	renderScene(route, nav) {
@@ -41,10 +44,13 @@ export default class MoneyManager extends Component {
 			case 'home':
 				return <PageMenu navigator={nav}><Accounts navigator={nav} customerInfo={this.state.customerInfo} headers={this.state.headers} setAccountId={this.setAccountId.bind(this)} /></PageMenu>;
 			case 'accounts':
-				return <PageMenu navigator={nav}><Home navigator={nav} accountId={this.state.accountId} customerInfo={this.state.customerInfo} headers={this.state.headers}  /></PageMenu>;
+				return <PageMenu navigator={nav}><Home navigator={nav} accountId={this.state.accountId} setTransactions={this.setTransactions.bind(this)} customerInfo={this.state.customerInfo} headers={this.state.headers}  /></PageMenu>;
 			case 'cashFlow':
-				return <PageMenu navigator={nav}><CashFlow navigator={nav} customerInfo={this.state.customerInfo} headers={this.state.headers} /></PageMenu>;
+				return <PageMenu navigator={nav}><CashFlow navigator={nav} transactions={this.state.transactions} customerInfo={this.state.customerInfo} headers={this.state.headers} /></PageMenu>;
+			case 'aggregatedCashFlow':
+				return <PageMenu navigator={nav}><CashFlow navigator={nav} transactions={null} customerInfo={this.state.customerInfo} headers={this.state.headers} /></PageMenu>;
 			default:
+				//return <PageMenu navigator={nav}><CashFlow navigator={nav} accountId={this.state.accountId} customerInfo={this.state.customerInfo} headers={this.state.headers}  /></PageMenu>;
 				return <TempLogin navigator={nav} setHeadersAndInfo={this.setHeadersAndInfo} />;
 		}
 	}
@@ -59,14 +65,14 @@ export default class MoneyManager extends Component {
 
 			if (navigator) {
 				var callback = (event) => {
-					console.log(
-						`NavigatorMenu: event ${event.type}`,
-						{
-							route: JSON.stringify(event.data.route),
-							target: event.target,
-							type: event.type,
-						}
-					);
+					// console.log(
+					// 	`NavigatorMenu: event ${event.type}`,
+					// 	{
+					// 		route: JSON.stringify(event.data.route),
+					// 		target: event.target,
+					// 		type: event.type,
+					// 	}
+					// );
 				};
 				// Observe focus change events from the owner.
 				this._listeners = [
