@@ -53,12 +53,11 @@ class Home extends Component {
   }
 
   bankAccountData(account){
-    return[
-        <Text style={{color:clrs.textPrimaryColor, fontSize:15}}>{account.accountNumber} ({account.accountFriendlyName})</Text>
-      , <View style={styles.horizontalAlign}>
+    return <View style={{padding:5, borderBottomColor:clrs.textPrimaryColor, borderBottomWidth:1}}>
+          <Text style={{color:clrs.textPrimaryColor, fontSize:15}}>{account.accountNumber} ({account.accountFriendlyName})</Text>
           <Text style={{color:clrs.textGreenColor, fontSize:20, marginLeft:5,}}>£ {account.accountBalance}</Text>
         </View>
-      ]
+      
   }
 
   componentDidMount(){
@@ -214,68 +213,42 @@ class Home extends Component {
 
           <Divider style={{ backgroundColor: 'blue' }} />
 
-          <Grid style={styles.verticalWidgetContainer}>
-            <Col style={styles.horizontalWidget}>
-              <Text style={{color:clrs.textPrimaryColor, fontSize:20, marginTop:10}}>Total Cash</Text>
-              <View style={styles.horizontalAlign}>
-                <Text style={{color:clrs.textGreenColor, fontSize:30, marginLeft:5, marginTop:12}}>£ {totalCash}</Text>
+          <View style={styles.balanceContainer}>
+              <View style={{flexDirection:'row', padding:15}}>
+                <Text style={{color:clrs.textPrimaryColor, fontSize:20, marginTop:10}}>Total Cash</Text>
+                <Text style={{color:clrs.textGreenColor, fontSize:30, marginLeft:10,}}>£ {totalCash}</Text>
               </View>
-            </Col> 
-            <Col style={styles.horizontalRightWidget}>
-              {renderBankAccounts}
-            </Col>
-          </Grid>
+              <View style={{opacity:0.7, backgroundColor:clrs.darkPrimaryColor, padding:15}}>
+                {renderBankAccounts}
+              </View>
+          </View>
 
-          <Grid style={styles.verticalWidgetContainerNoHeight}>
-            <Col>
-              <Text style={{fontSize:14, fontWeight:'bold', color:clrs.secondaryText, marginBottom:5}}>CASH IN WALLET</Text>          
+          <View style={styles.balanceContainer}>
+            <View style={{padding:15}}>
               <Grid>
-                <Col size={1}>
-                  <Icon
-                    name='rupee'
-                    type='font-awesome'
-                    size={20}
-                    color={clrs.textPrimaryColor} />
+                <Col>
+                  <Text style={{fontSize:14, fontWeight:'bold', color:clrs.secondaryText, marginBottom:5}}>CASH IN WALLET</Text>          
+                  <Text style={{fontSize:20, color:clrs.textPrimaryColor, marginTop:-5}}>£ {cashInWallet}</Text>
                 </Col>
-                <Col size={6}>
-                  <Text style={{fontSize:20, color:clrs.textPrimaryColor, marginTop:-5}}>{cashInWallet}</Text>
+                <Col>
+                  <Text style={{fontSize:14, fontWeight:'bold', color:clrs.secondaryText}}>LAST WITHDRAWAL</Text>          
+                  <Text style={{fontSize:20, color:clrs.textPrimaryColor, marginTop:-5}}>£ {lastWithdrawal}</Text>
                 </Col>
               </Grid>
-            </Col>
-            <Col>
-              <Text style={{fontSize:14, fontWeight:'bold', color:clrs.secondaryText}}>LAST WITHDRAWAL</Text>          
-              <Grid>
-                <Col size={1}>
-                  <Icon
-                    name='rupee'
-                    type='font-awesome'
-                    size={20}
-                    color={clrs.textPrimaryColor} />
-                </Col>
-                <Col size={6}>
-                  <Text style={{fontSize:20, color:clrs.textPrimaryColor, marginTop:-5}}>{lastWithdrawal}</Text>
-                </Col>
-              </Grid>
-            </Col>
-          </Grid>
+            </View>
+          </View>
 
-          <Grid style={styles.verticalWidgetContainer}>
-            <Col style={styles.horizontalWidget}>
+          <View style={styles.balanceContainer}>
+            <View style={{flexDirection:'row', padding:15}}>
               <Text style={{color:clrs.textPrimaryColor, fontSize:20, marginTop:10}}>Upcoming expenses</Text>
-              <View style={styles.horizontalAlign}>
-                <Text style={{color:clrs.textGreenColor, fontSize:30, marginLeft:5, marginTop:12}}>£ {upComingExpenses}</Text>
-              </View>
-            </Col> 
-            <Col size={5}>
-              <Grid>
-                <Col size={5}><Text style={{fontSize:30, marginLeft:10, marginTop:25, color:'#fff'}}>{totalExpenses}</Text></Col>
-                <Col size={6}>
-                  <Text style={{fontSize:18, marginTop:30, color:'#fff'}}>Expenses</Text>
-                  <Text style={{fontSize:18, color:clrs.linkButtonColor}}>View All</Text>
-                </Col>
-              </Grid>
-            </Col>
-          </Grid>
+               <Text style={{color:clrs.textGreenColor, fontSize:30, marginLeft:10,}}>£ {upComingExpenses}</Text>
+            </View> 
+            <View style={{flexDirection:'row', opacity:0.7, backgroundColor:clrs.darkPrimaryColor, padding:15}}>
+              <Text style={{fontSize:30, color:'#fff'}}>{totalExpenses}</Text>
+              <Text style={{fontSize:18, color:'#fff', marginLeft:5, marginTop:10}}>Expenses</Text>
+              <Text style={{fontSize:18, color:clrs.linkButtonColor, marginLeft:5, marginTop:10}}>View All</Text>
+            </View>
+          </View>
 
           <View style={styles.pageFooter}>
             <Text style={styles.footerText}>All rights reserved</Text>
@@ -368,6 +341,13 @@ const styles = StyleSheet.create({
   chartLegendText:{
     color:clrs.black,
     fontSize:16
+  },
+  balanceContainer:{
+    backgroundColor:clrs.widgetBackgroundColor,
+    borderBottomColor:clrs.textPrimaryColor,
+    borderBottomWidth:1,
+    position:'relative',
+    marginTop:5
   }
 
 });

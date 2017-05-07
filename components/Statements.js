@@ -58,7 +58,7 @@ export default class statement extends Component{
 
         return <View style={styles.page}>
             <View style={styles.pageHeader}>
-                <Text style={styles.headerText}>{label}</Text>
+                <Text style={styles.headerText}>{label ? label : 'Others'}</Text>
                 <Text>(Statement)</Text>
                 <View style={{position:'absolute', top:10, right:20}}>
                     <Icon

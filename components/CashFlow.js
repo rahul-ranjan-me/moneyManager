@@ -271,7 +271,7 @@ class CashFlow extends Component {
                   <Col>
                     <View style={{marginTop:-10, marginLeft:5}}>
                       <Text style={{fontSize:20, color:color, fontSize:14}}>£ {data.amount.toFixed(2)}</Text>
-                      <Text style={{fontWeight:'bold'}}>{data.label}</Text>
+                      <Text style={{fontWeight:'bold'}}>{data.label ? data.label: 'Others'}</Text>
                     </View>
                   </Col>
                 </Grid>

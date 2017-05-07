@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
   },
   textInfo:{
     color:clrs.textPrimaryColor,
-    fontSize:15,
+    fontSize:14,
     marginBottom:10,
   },
   pageHeader:{
