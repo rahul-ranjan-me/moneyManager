@@ -22,6 +22,7 @@ import {
 import {GoogleSignin} from 'react-native-google-signin';
 import {labels, categoryCashFlow} from '../utils/cashFlowKey'
 import Spinner from 'react-native-loading-spinner-overlay';
+import { hardwareBackPress } from 'react-native-back-android';
 
 const calcTransactions = (transactions) => {
   let data = {
@@ -42,7 +43,7 @@ const calcTransactions = (transactions) => {
       data[category1stLevel][category2ndLevel] = {
           label:label.label,
           amount:tran.transactionAmount,
-          icon:label.icon
+          icon:label.icon?label.icon:'money'
       }
     }
   };
@@ -112,7 +113,7 @@ const calcTransactions = (transactions) => {
 
 const {height, width} = Dimensions.get('window');
 
-export default class CashFlow extends Component {
+class CashFlow extends Component {
   constructor(props){
     super(props);
     this.state = {
@@ -170,6 +171,8 @@ export default class CashFlow extends Component {
           this.calcTransactionPromise(allAccounts)
         })
         .catch((error) => {
+          this.setState({'visible':true});
+          alert('Some error occured fetching data');
           console.error(error)
         })
     }
@@ -188,7 +191,7 @@ export default class CashFlow extends Component {
 
   createIncomeChart(data, type, biggestItem){
     const totalWidth = parseInt(data.amount)/biggestItem*100
-      adjustedWidth = ((Math.round(width*totalWidth/100))*70/100)+30,
+      adjustedWidth = ((Math.round(width*totalWidth/100))*60/100)+30,
       color = type === 'income'? clrs.linkButtonColor : clrs.expenseColor;
 
     return [
@@ -280,6 +283,14 @@ export default class CashFlow extends Component {
     );    
   }
 }
+
+const handleBackButtonPress = ({ navigator }) => {
+  navigator.pop();
+  return true;
+};
+const cashflow = hardwareBackPress(CashFlow, handleBackButtonPress);
+
+export default cashflow;
 
 const styles = StyleSheet.create({
   page: {

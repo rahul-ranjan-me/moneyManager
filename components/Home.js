@@ -23,10 +23,11 @@ import {Pie} from 'react-native-pathjs-charts';
 import pieOptions from '../utils/DashboardPie';
 import {GoogleSignin} from 'react-native-google-signin';
 import Spinner from 'react-native-loading-spinner-overlay';
+import { hardwareBackPress } from 'react-native-back-android';
 
 const {height, width} = Dimensions.get('window');
 
-export default class Home extends Component {
+class Home extends Component {
   constructor(props){
     super(props);
     this.showCashFlow = this.showCashFlow.bind(this);
@@ -103,6 +104,8 @@ export default class Home extends Component {
             this.setState({visible:false});
           })
           .catch((error) => {
+            this.setState({'visible':true});
+            alert('Some error occured fetching data');
             console.error(error)
           })
 			})
@@ -271,6 +274,14 @@ export default class Home extends Component {
     );    
   }
 }
+
+const handleBackButtonPress = ({ navigator }) => {
+  navigator.pop();
+  return true;
+};
+const home = hardwareBackPress(Home, handleBackButtonPress);
+
+export default home;
 
 const styles = StyleSheet.create({
 	page: {

@@ -14,8 +14,9 @@ import {
 	FormLabel
 } from 'react-native-elements';
 import Spinner from 'react-native-loading-spinner-overlay';
+import { hardwareBackPress } from 'react-native-back-android';
 
-export default class TempLogin extends Component {
+class TempLogin extends Component {
   constructor(props){
     super(props);
 		this.state = {'jwtToken': null, 'subscriptionKey': null, visible:false};
@@ -31,8 +32,8 @@ export default class TempLogin extends Component {
 
 	updateStorage(){
 		this.setState({'visible':true});
-		this.state.jwtToken = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6Ilg1ZVhrNHh5b2pORnVtMWtsMll0djhkbE5QNC1jNTdkTzZRR1RWQndhTmsifQ.eyJleHAiOjE0OTQwOTQzODEsIm5iZiI6MTQ5NDA5MDc4MSwidmVyIjoiMS4wIiwiaXNzIjoiaHR0cHM6Ly9sb2dpbi5taWNyb3NvZnRvbmxpbmUuY29tL2Q1Zjg1NjgyLWY2N2EtNDQ0NC05MzY5LTJjNWVjMWEwZThjZC92Mi4wLyIsInN1YiI6IjQ4YmQzMzVkLTU2OTEtNDA0Ni04NDM4LTJiOTFjY2Y2NWVkNSIsImF1ZCI6IjBmN2VmODEwLTJmOWMtNDI0Yy05NDJhLTQ4YzZlYTM2MWQ5YSIsIm5vbmNlIjoiZGVmYXVsdE5vbmNlICIsImlhdCI6MTQ5NDA5MDc4MSwiYXV0aF90aW1lIjoxNDk0MDkwNzgxLCJvaWQiOiI0OGJkMzM1ZC01NjkxLTQwNDYtODQzOC0yYjkxY2NmNjVlZDUiLCJuYW1lIjoiUmFodWwiLCJmYW1pbHlfbmFtZSI6IlJhbmphbiIsImdpdmVuX25hbWUiOiJSYWh1bCBSYW5qYW4iLCJlbWFpbHMiOlsicmFodWwucmFuamFuQHJicy5jb20iXSwidGZwIjoiQjJDXzFfQmx1ZUJhbmtTVVNJIn0.m-rUPNEF3r3x8yuFqN46_Y824KUJ6nFtVr6I2VlCxFhsoEvNo-Yb1ql_msb5jp_kBPrnCa7CN-PoR5jKJGFuGyvs28RZxnTNjBLBqlKLu1AgvmbJknCOEB6G9KxAqqJDzBZ3KnlBtNTq6xulEsoh7RRqs8PPeKfsQjOEad_ZbRKXBstyZVLl8kBCxpGeQjgOjX-5wjiBxymzsVgIuv4cpCVzTo97aVyRPtYkU6XGnGk_Tqx_M1eAKrTe0_BhDXRUomOlbVFIHJfjBa77ZqZLsacXrACRxtfDyVyzEyNYBhRdzcUwOisEPW8-nexNTbLUiSdq5wfs1xKn6L-rprYWOQ';
-		this.state.subscriptionKey = '945965cd002045d497995b94115e65f1';
+		// this.state.jwtToken = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6Ilg1ZVhrNHh5b2pORnVtMWtsMll0djhkbE5QNC1jNTdkTzZRR1RWQndhTmsifQ.eyJleHAiOjE0OTQxMjUyMzIsIm5iZiI6MTQ5NDEyMTYzMiwidmVyIjoiMS4wIiwiaXNzIjoiaHR0cHM6Ly9sb2dpbi5taWNyb3NvZnRvbmxpbmUuY29tL2Q1Zjg1NjgyLWY2N2EtNDQ0NC05MzY5LTJjNWVjMWEwZThjZC92Mi4wLyIsInN1YiI6IjQ4YmQzMzVkLTU2OTEtNDA0Ni04NDM4LTJiOTFjY2Y2NWVkNSIsImF1ZCI6IjBmN2VmODEwLTJmOWMtNDI0Yy05NDJhLTQ4YzZlYTM2MWQ5YSIsIm5vbmNlIjoiZGVmYXVsdE5vbmNlICIsImlhdCI6MTQ5NDEyMTYzMiwiYXV0aF90aW1lIjoxNDk0MTIxNjMyLCJvaWQiOiI0OGJkMzM1ZC01NjkxLTQwNDYtODQzOC0yYjkxY2NmNjVlZDUiLCJuYW1lIjoiUmFodWwiLCJmYW1pbHlfbmFtZSI6IlJhbmphbiIsImdpdmVuX25hbWUiOiJSYWh1bCBSYW5qYW4iLCJlbWFpbHMiOlsicmFodWwucmFuamFuQHJicy5jb20iXSwidGZwIjoiQjJDXzFfQmx1ZUJhbmtTVVNJIn0.iv2Hym_xmZwDT10toKXMoFoz2-Yj1kGjK3ulmhV-Lcdyir6OB_7jp2wKrKdEI-hqolit0h9SSgPQzvmMIGev1ef-M-oSQFvq6K3l9KTh1DEHMtukBNzKZgBtgDODW6DCjWqp_q-8snNL8SzQPLY1d62kBWAYw2wlY6iJ4KaY3kEfPrV2NwYPfIEXO-lCEUDX6cr6MUPvGVQb4kcEMNwWl2484psPAOkwsk3HVvdImKwXiZejaZq8B2K2FkoGMM74twTXQz-oR2Ej1S6VICKRtdcOYvHZSqu9Dp3AX16v-D_NdvTfoLDdxNvrJE2o9-8sf7u_9ZcmO5tci3RBPsGsJg';
+		// this.state.subscriptionKey = '945965cd002045d497995b94115e65f1';
 
 		const headers = {
 			'Authorization' : 'bearer '+this.state.jwtToken,
@@ -49,6 +50,7 @@ export default class TempLogin extends Component {
 				this.props.navigator.replace({ id: 'home' });
 			})
 			.catch((error) => {
+				this.setState({'visible':true});
 				alert('Error occured, please check subscription key or jwt token');
 				console.error(error)
 			})
@@ -82,6 +84,14 @@ export default class TempLogin extends Component {
     );    
   }
 }
+
+const handleBackButtonPress = ({ navigator }) => {
+  navigator.pop();
+  return true;
+};
+const templogin = hardwareBackPress(TempLogin, handleBackButtonPress);
+
+export default templogin;
 
 const styles = StyleSheet.create({
 	page: {

@@ -23,8 +23,9 @@ import AccontSwiper from './AccontSwiper';
 import WelcomeBar from '../reusable-components/WelcomeBar';
 import CombinedAccountBalance from '../reusable-components/CombinedAccountBalance';
 import Spinner from 'react-native-loading-spinner-overlay';
+import { hardwareBackPress } from 'react-native-back-android';
 
-export default class Accounts extends Component{
+class Accounts extends Component{
   constructor(props){
     super(props)
     this.attributesXhr = {
@@ -52,10 +53,14 @@ export default class Accounts extends Component{
             this.setState({'accountsInfo': responseJson.results, visible: false});
           })
           .catch((error) => {
+            this.setState({'visible':true});
+            alert('Some error occured fetching data');
             alert(error);
           })
       })
       .catch((error) => {
+        this.setState({'visible':true});
+        alert('Some error occured fetching data');
         alert(error);
       })
   }
@@ -77,6 +82,15 @@ export default class Accounts extends Component{
     )
   }
 }
+
+const handleBackButtonPress = ({ navigator }) => {
+  console.log(navigator);
+  navigator.pop();
+  return true;
+};
+const accounts = hardwareBackPress(Accounts, handleBackButtonPress);
+
+export default accounts;
 
 const styles = StyleSheet.create({
 	page: {

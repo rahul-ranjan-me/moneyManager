@@ -4,6 +4,7 @@ import {
   View,
   Text,
 } from 'react-native';
+import backAndroid from 'react-native-back-android';
 import clrs from '../utils/Clrs';
 
 import PageMenu from './PageMenu';
@@ -18,7 +19,7 @@ import CashFlow from './CashFlow';
 // import Rewards from './Rewards';
 // import ExpressInvite from './ExpressInvite';
 
-export default class MoneyManager extends Component {
+class MoneyManager extends Component {
 
 	constructor(props) {
 		super(props);
@@ -100,3 +101,7 @@ export default class MoneyManager extends Component {
 		);
 	}
 };
+
+const App = backAndroid(MoneyManager);
+
+export default App;
