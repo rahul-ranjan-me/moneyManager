@@ -30,7 +30,8 @@ export default class Header extends Component{
 const styles = StyleSheet.create({
 	container:{
     backgroundColor:clrs.widgetBackgroundColor,
-    padding:15,
+    paddingTop:15,
+    paddingBottom:15,
     marginTop:1,
   },
   textInfo:{
@@ -40,7 +41,8 @@ const styles = StyleSheet.create({
   },
   pageHeader:{
       backgroundColor:clrs.primaryColor,
-      padding:15,
+      paddingTop:15,
+      paddingBottom:15,
       marginTop:1,
       alignItems:'center'
   },
