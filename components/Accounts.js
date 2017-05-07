@@ -24,6 +24,7 @@ import WelcomeBar from '../reusable-components/WelcomeBar';
 import CombinedAccountBalance from '../reusable-components/CombinedAccountBalance';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { hardwareBackPress } from 'react-native-back-android';
+import PageFooter from '../reusable-components/PageFooter';
 
 class Accounts extends Component{
   constructor(props){
@@ -53,13 +54,13 @@ class Accounts extends Component{
             this.setState({'accountsInfo': responseJson.results, visible: false});
           })
           .catch((error) => {
-            this.setState({'visible':true});
+            this.setState({'visible':false});
             alert('Some error occured fetching data');
             alert(error);
           })
       })
       .catch((error) => {
-        this.setState({'visible':true});
+        this.setState({'visible':false});
         alert('Some error occured fetching data');
         alert(error);
       })
@@ -74,11 +75,10 @@ class Accounts extends Component{
       <View style={styles.page}>
         <WelcomeBar customerInfo={this.state.customerInfo} />
         <CombinedAccountBalance accountsInfo={this.state.accountsInfo} />
-        <Divider style={{ backgroundColor: 'blue', marginTop:10 }} />
-        <Divider style={{ backgroundColor: 'blue' }} />
         <AccontSwiper accountsInfo={this.state.accountsInfo} navigator={this.props.navigator} setAccountId={this.setAccountId.bind(this)} />
+        <PageFooter />
         <Spinner visible={this.state.visible} textContent={"Fetching data ..."} textStyle={{color: clrs.textPrimaryColor}} overlayColor={clrs.overlayColor} />
-      </View>
+     </View>
     )
   }
 }

@@ -24,16 +24,33 @@ import {labels, categoryCashFlow} from '../utils/cashFlowKey'
 import Spinner from 'react-native-loading-spinner-overlay';
 import { hardwareBackPress } from 'react-native-back-android';
 
+let transactionsData = [],
+calculatedData;
+
 const calcTransactions = (transactions) => {
+  transactionsData = transactions;
   let data = {
     incomeData : {},
     expenseData : {},
     income: 0,
     expense: 0,
     incomeArrData:[],
-    expenseArrData:[]
+    expenseArrData:[],
+    incomeStatementData : {},
+    expenseStatementData : {}
   }
   const unclassified = (category1stLevel, category2ndLevel, label, tran) => {
+    if(category1stLevel === 'incomeData'){
+      if(!data.incomeStatementData[category2ndLevel]){
+        data.incomeStatementData[category2ndLevel] = [];
+      }
+      data.incomeStatementData[category2ndLevel].push(tran)
+    }else{
+      if(!data.expenseStatementData[category2ndLevel]){
+        data.expenseStatementData[category2ndLevel] = [];
+      }
+      data.expenseStatementData[category2ndLevel].push(tran)
+    }
 
     tran.transactionAmount > 0 ? data.income += tran.transactionAmount : data.expense += Math.abs(tran.transactionAmount);
 
@@ -62,12 +79,21 @@ const calcTransactions = (transactions) => {
           }
         }
         data.income += tran.transactionAmount;
+
+        if(!data.incomeStatementData['salary']){
+          data.incomeStatementData['salary'] = [];
+        }
+        data.incomeStatementData['salary'].push(tran);
       }
     }else{
       const is2ndLevel = categoryCashFlow[tran.transactionType].is2ndLevel;
       
       if(!tran.transactionType){
         unclassified('incomeData', 'salary', 'Salary', tran);
+        if(!data.incomeStatementData['salary']){
+          data.incomeStatementData['salary'] = [];
+        }
+        data.incomeStatementData['salary'].push(tran);
         return;
       }
 
@@ -93,6 +119,7 @@ const calcTransactions = (transactions) => {
 
           
         }
+
         unclassified(category1stLevel, category2ndLevel, labels[category2ndLevel], tran);
       }
       
@@ -108,6 +135,8 @@ const calcTransactions = (transactions) => {
   for(var i in data.expenseData){
     data.expenseArrData.push(data.expenseData[i]);
   }
+
+  calculatedData = data;
   return data;
 }
 
@@ -135,6 +164,7 @@ class CashFlow extends Component {
     this.totalAccounts = 0;
     this.currentCursor = 0;
     this.transactionCalculatedData = [];
+    this.getDetails = this.getDetails.bind(this);
   }
 
   calcTransactionPromise(allAccounts){
@@ -171,7 +201,7 @@ class CashFlow extends Component {
           this.calcTransactionPromise(allAccounts)
         })
         .catch((error) => {
-          this.setState({'visible':true});
+          this.setState({'visible':false});
           alert('Some error occured fetching data');
           console.error(error)
         })
@@ -189,23 +219,45 @@ class CashFlow extends Component {
     return biggestItem
   }
 
+  getDetails(data, type){
+    for(var i in labels){
+      if(labels[i].label === data.label){
+        const transactions = [];
+        if(type === 'income'){
+          transactions = calculatedData.incomeStatementData[i];
+        }else{
+          transactions = calculatedData.expenseStatementData[i];
+        }
+        this.props.setAllTransaction({key:i, label:data.label, transactions:transactions, cashFlow:this.props.transactions?true:false});
+        this.props.navigator.replace({id: 'statement'});
+        return;
+      }
+    }
+  }
+
   createIncomeChart(data, type, biggestItem){
     const totalWidth = parseInt(data.amount)/biggestItem*100
       adjustedWidth = ((Math.round(width*totalWidth/100))*60/100)+30,
       color = type === 'income'? clrs.linkButtonColor : clrs.expenseColor;
+    
+    const getData = (data) => {
+      this.getDetails(data, type);
+    }
 
     return [
-      <View style={{marginLeft:15, marginTop:10, flex:1, flexDirection:'column'}}>
+      <Grid onPress={() => {getData(data)}}>
+        <Col>
+      <View style={{marginLeft:15, marginTop:10, flex:1, flexDirection:'column'}} onPress={() => {getData(data)}}>
         <View style={{height:50, marginLeft:10, backgroundColor:'#666', marginTop:-10, width:5,}}><Text style={{height:50, width:5}}></Text></View>
         <View>
           <Grid>
-          
               <View style={{width:40, height:40, borderRadius:50, backgroundColor:color, position:'relative', zIndex:2, marginTop:-5}}>
                 <View style={{width:30, height:30, borderRadius:50, marginTop:5, marginLeft:5, paddingTop:5, backgroundColor:clrs.textPrimaryColor}}>
                   <Icon
                     name={data.icon}
                     type='font-awesome'
                     size={20}
+                    
                     color={color} />
                 </View>
               </View>
@@ -218,18 +270,23 @@ class CashFlow extends Component {
                   </Col>
                   <Col>
                     <View style={{marginTop:-10, marginLeft:5}}>
-                      <Text style={{fontSize:20, color:color}}>{data.amount.toFixed(2)}</Text>
+                      <Text style={{fontSize:20, color:color, fontSize:14}}>£ {data.amount.toFixed(2)}</Text>
                       <Text style={{fontWeight:'bold'}}>{data.label}</Text>
                     </View>
                   </Col>
                 </Grid>
               </View>
 
-              
           </Grid>
         </View>
       </View>
+        </Col>
+      </Grid>
     ]
+  }
+
+  manageBack(){
+    this.props.transactions ? this.props.navigator.replace({id: 'accounts'}) : this.props.navigator.replace({id: 'home'});
   }
 
   render() {
@@ -249,6 +306,14 @@ class CashFlow extends Component {
           />*/}
           <Text style={styles.headerText}>Cashflow</Text>
           <Text>({this.state.subtitle})</Text>
+          <View style={{position:'absolute', top:10, right:20}}>
+            <Icon
+              name='backward'
+              type='font-awesome'
+              size={50}
+              onPress={this.manageBack.bind(this)}
+              color={clrs.textPrimaryColor} />
+          </View>
         </View>
 
         <ScrollView>

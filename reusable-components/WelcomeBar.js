@@ -19,11 +19,11 @@ export default class Header extends Component{
   render(){
     const {givenName, id, mobilePhone} = this.state.customerInfo;
 
-    return <View style={styles.container}>
-          <Text style={styles.textInfo}>Welcome : {givenName}</Text>
-          <Text style={styles.textInfo}>AccountId : {id}</Text>
-          <Text style={styles.textInfo}>Mobile Phone : {mobilePhone}</Text>
-        </View>
+    return <View style={styles.pageHeader}>
+                <Text style={styles.headerText}>Welcome {givenName}</Text>
+                <Text style={styles.textInfo}>AccountId : {id}</Text>
+                <Text style={styles.textInfo}>Mobile Phone : {mobilePhone}</Text>
+            </View>
   }
 }
 
@@ -36,6 +36,17 @@ const styles = StyleSheet.create({
   textInfo:{
     color:clrs.textPrimaryColor,
     fontSize:15,
-    marginBottom:10
-  }
+    marginBottom:10,
+  },
+  pageHeader:{
+      backgroundColor:clrs.primaryColor,
+      padding:15,
+      marginTop:1,
+      alignItems:'center'
+  },
+  headerText:{
+      fontSize:24,
+      color: clrs.textPrimaryColor,
+      fontWeight:'bold'
+  },
 })

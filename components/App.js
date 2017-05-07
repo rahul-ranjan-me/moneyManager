@@ -14,6 +14,7 @@ import Accounts from './Accounts';
 import Home from './Home';
 import Login from './Login';
 import CashFlow from './CashFlow';
+import Statements from './Statements';
 // import SearchPartner from './SearchPartner';
 // import History from './History';
 // import Rewards from './Rewards';
@@ -37,7 +38,11 @@ class MoneyManager extends Component {
 	}
 
 	setTransactions(transactions){
-		this.setState({transactions, transactions})
+		this.setState({transactions: transactions})
+	}
+
+	setAllTransaction(transactions){
+		this.setState({allTransactions: transactions})
 	}
 
 	renderScene(route, nav) {
@@ -47,9 +52,24 @@ class MoneyManager extends Component {
 			case 'accounts':
 				return <PageMenu navigator={nav}><Home navigator={nav} accountId={this.state.accountId} setTransactions={this.setTransactions.bind(this)} customerInfo={this.state.customerInfo} headers={this.state.headers}  /></PageMenu>;
 			case 'cashFlow':
-				return <PageMenu navigator={nav}><CashFlow navigator={nav} accountId={this.state.accountId} transactions={this.state.transactions} customerInfo={this.state.customerInfo} headers={this.state.headers} /></PageMenu>;
+				return <PageMenu navigator={nav}>
+					<CashFlow navigator={nav} 
+						accountId={this.state.accountId} 
+						transactions={this.state.transactions} 
+						customerInfo={this.state.customerInfo}
+						setAllTransaction = {this.setAllTransaction.bind(this)}
+						headers={this.state.headers} />
+				</PageMenu>;
 			case 'aggregatedCashFlow':
-				return <PageMenu navigator={nav}><CashFlow navigator={nav} transactions={null} customerInfo={this.state.customerInfo} headers={this.state.headers} /></PageMenu>;
+				return <PageMenu navigator={nav}>
+					<CashFlow navigator={nav} 
+						transactions={null} 
+						customerInfo={this.state.customerInfo} 
+						setAllTransaction = {this.setAllTransaction.bind(this)}
+						headers={this.state.headers} />
+					</PageMenu>;
+			case 'statement':
+				return <PageMenu navigator={nav}><Statements navigator={nav} allTransactions={this.state.allTransactions} customerInfo={this.state.customerInfo} headers={this.state.headers} /></PageMenu>;
 			default:
 				//return <PageMenu navigator={nav}><CashFlow navigator={nav} accountId={this.state.accountId} customerInfo={this.state.customerInfo} headers={this.state.headers}  /></PageMenu>;
 				return <TempLogin navigator={nav} setHeadersAndInfo={this.setHeadersAndInfo} />;

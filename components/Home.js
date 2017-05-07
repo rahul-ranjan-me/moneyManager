@@ -118,6 +118,10 @@ class Home extends Component {
     this.props.navigator.replace({ id: 'cashFlow' });
   }
 
+  manageBack(){
+    this.props.navigator.replace({id: 'home'});
+  }
+
   render() {
     const {bankAccounts, cashInWallet, lastWithdrawal, upComingExpenses, totalExpenses, accountPie} = accountData;
     const renderBankAccounts = this.state.accounts.map(this.bankAccountData);
@@ -134,6 +138,14 @@ class Home extends Component {
             source={{uri: user.photo}}
           />*/}
           <Text style={styles.headerText}>Dashboard</Text>
+          <View style={{position:'absolute', top:10, right:20,}}>
+            <Icon
+              name='backward'
+              type='font-awesome'
+              size={40}
+              onPress={this.manageBack.bind(this)}
+              color={clrs.textPrimaryColor} />
+          </View>
         </View>
 
         <ScrollView>

@@ -95,7 +95,11 @@ export class SlideItem extends Component{
               onPress={this.showHome.bind(this)}
               backgroundColor={clrs.linkButtonColor}
               title='See account details' />
+            <View>
+              <Text style={{ marginTop:20, marginLeft:30}}>Please swipe right or left to see other accounts</Text>
+            </View>
           </View>
+          
       </View>
     }
 }
@@ -104,7 +108,9 @@ const styles = StyleSheet.create({
   wrapper:{},
   slide: {
     flex:1,
-    backgroundColor: '#97CAE5',
+    backgroundColor: clrs.textPrimaryColor,
+    borderBottomColor:clrs.secondaryText,
+    borderBottomWidth:1,
   },
   backgroundInnerlay: {
     width:width,
