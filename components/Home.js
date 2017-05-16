@@ -52,8 +52,8 @@ class Home extends Component {
     }
   }
 
-  bankAccountData(account){
-    return <View style={{padding:5, borderBottomColor:clrs.textPrimaryColor, borderBottomWidth:1}}>
+  bankAccountData(account, key){
+    return <View key={key} style={{padding:5, borderBottomColor:clrs.textPrimaryColor, borderBottomWidth:1}}>
           <Text style={{color:clrs.textPrimaryColor, fontSize:15}}>{account.accountNumber} ({account.accountFriendlyName})</Text>
           <Text style={{color:clrs.textGreenColor, fontSize:20, marginLeft:5,}}>£ {account.accountBalance}</Text>
         </View>
