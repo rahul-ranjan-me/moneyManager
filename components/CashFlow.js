@@ -84,7 +84,7 @@ class CashFlow extends Component {
     }
 
     calcTransactions = (transactions, subtitle) => {
-        fetch('http://192.168.1.5:5000', {
+        fetch('https://frozen-cliffs-20193.herokuapp.com/', {
             method: 'POST',
             body:JSON.stringify({
                 results: transactions
