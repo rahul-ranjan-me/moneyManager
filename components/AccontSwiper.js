@@ -4,11 +4,15 @@ import {
   Text,
   StyleSheet,
   Dimensions,
+  ScrollView,
+  TouchableOpacity
 } from 'react-native';
 import { 
 	Button,
   Divider,
+  Icon,
 } from 'react-native-elements';
+import LinearGradient from 'react-native-linear-gradient';
 import Swiper from 'react-native-swiper';
 import clrs from '../utils/Clrs';
 
@@ -32,14 +36,16 @@ export default class Header extends Component{
 
   render(){
     return (
-      <View style={{flex:1, backgroundColor:clrs.pageBackgroundColor}}>
-          {this.state.accountsInfo.length > 0 ? <Swiper style={styles.wrapper}>
-        
+      <ScrollView style={{flex:1}}>
+        <LinearGradient colors={clrs.scrollArrayBackgroundColor} style={styles.page}>
+          {this.state.accountsInfo.length > 0 ? <View>
+             
               {this.state.accountsInfo.map((item, i) => (
-                <SlideItem item={item} key={i} navigator={this.props.navigator} setAccountId={this.setAccountId.bind(this)} />
+                <SlideItem style={styles.slide} item={item} navigator={this.props.navigator} setAccountId={this.setAccountId.bind(this)} key={i} />
               ))}
-            </Swiper> : null}
-      </View>
+            </View> : null}
+        </LinearGradient>
+      </ScrollView>
     )
   }
 }
@@ -57,83 +63,68 @@ export class SlideItem extends Component{
     render(){
       const {id, sortCode, accountNumber, Iban, Bban, accountType, accountFriendlyName, accountBalance, accountCurrency} = this.props.item;
       
-      return <View style={styles.slide}>
-          <View style={styles.accountsDetails}>
-            <View style={styles.infoWrapper}>
-              <Text style={styles.heading}>Account Name: </Text>
-              <Text style={styles.text}>{accountFriendlyName}</Text>
-            </View>
-            <View style={styles.infoWrapper}>
-              <Text style={styles.heading}>Account Id: </Text>
-              <Text style={styles.text}>{id}</Text>
-            </View>
-            <View style={styles.infoWrapper}>
-              <Text style={styles.heading}>Account Sortcode: </Text>
-              <Text style={styles.text}>{sortCode}</Text>
-            </View>
-            <View style={styles.infoWrapper}>
-              <Text style={styles.heading}>Account Number: </Text>
-              <Text style={styles.text}>{accountNumber}</Text>
-            </View>
-            <View style={styles.infoWrapper}>
-              <Text style={styles.heading}>Account Type: </Text>
-              <Text style={styles.text}>{accountType}</Text>
-            </View>
-            <View style={styles.infoWrapper}>
-              <Text style={styles.heading}>Account Balance: </Text>
-              <Text style={styles.text}>{accountBalance}</Text>
-            </View>
-            <View style={styles.infoWrapper}>
-              <Text style={styles.heading}>Account Currency: </Text>
-              <Text style={styles.text}>{accountCurrency}</Text>
-            </View>
-            <Button
-              raised
-              icon={{name: 'angle-double-right', type: 'font-awesome'}}
-              iconRight={true}
-              buttonStyle={{margin:10}}
-              onPress={this.showHome.bind(this)}
-              backgroundColor={clrs.linkButtonColor}
-              title='See account details' />
-            <View>
-              <Text style={{ marginTop:20, marginLeft:30}}>Please swipe right or left to see other accounts</Text>
-            </View>
-          </View>
-          
-      </View>
+      return <TouchableOpacity onPress={this.showHome.bind(this)} style={styles.accountContainer}>
+        <View>
+          <Icon
+            name='cube'
+            type='font-awesome'
+            size={20}
+            color={clrs.primaryWhiteText}
+            style={{position:'absolute', left:0, top:3}}
+            />
+          <Text style={styles.accountTitle}>{accountFriendlyName}</Text>
+        </View>
+        <Text style={styles.accountBalance}>£ {accountBalance}</Text>
+        <View style={styles.infoWrapper}>
+          <Text style={styles.heading}>Sortcode: </Text>
+          <Text style={styles.text}>{sortCode}</Text>
+        </View>
+        <View style={styles.infoWrapper}>
+          <Text style={styles.heading}>Number: </Text>
+          <Text style={styles.text}>{accountNumber}</Text>
+        </View>
+        <View style={styles.infoWrapper}>
+          <Text style={styles.heading}>Type: </Text>
+          <Text style={styles.text}>{accountType}</Text>
+        </View>
+        </TouchableOpacity>
     }
 }
 
 const styles = StyleSheet.create({
   wrapper:{},
-  slide: {
-    flex:1,
-    backgroundColor: clrs.textPrimaryColor,
-    borderBottomColor:clrs.secondaryText,
-    borderBottomWidth:1,
-  },
-  backgroundInnerlay: {
+  accountContainer:{
+    padding:15,
     width:width,
-    height:null,
-    opacity:0.7,
-    backgroundColor:clrs.pageBackgroundColor
-  },
-  accountsDetails:{
-    padding:10,
-    backgroundColor:"rgba(255,255,255,.5)",
-    width:width,
+    borderTopColor:clrs.secondaryWhiteText,
+    borderTopWidth:1
   },
   infoWrapper:{
-    marginBottom:5,
+    marginTop:5,
     flexDirection:'row'
   },
+  accountTitle:{
+    color:clrs.primaryWhiteText,
+    fontSize:20,
+    marginBottom:5,
+    marginLeft:30,
+  },
+  accountBalance:{
+    fontSize:34,
+    position:'absolute',
+    right:15,
+    color:clrs.textGreenColor,
+    marginTop:15,
+  },
   text: {
-    color: '#333',
+    color: clrs.primaryWhiteText,
     fontSize: 15,
     fontWeight: 'bold',
   },
   heading:{
     fontSize:17,
-    fontWeight:'bold'
+    fontWeight:'bold',
+    color:clrs.secondaryWhiteText,
+    width:90,
   }
 })

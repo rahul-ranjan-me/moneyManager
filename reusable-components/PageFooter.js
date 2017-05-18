@@ -20,13 +20,14 @@ export default class PageFooter extends Component{
 
 const styles = StyleSheet.create({
 	pageFooter:{
-        backgroundColor:clrs.darkPrimaryColor,
+        backgroundColor:clrs.pageFooterColor,
         padding:10,
-        marginTop:15,
         alignItems:'center'
     },
     footerText:{
         fontSize:20,
-        color: clrs.textPrimaryColor
+        color: clrs.textPrimaryColor,
+        textShadowColor:'#000',
+		    textShadowOffset:{width:1, height:1}
     },
 })

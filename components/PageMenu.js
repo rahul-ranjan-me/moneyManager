@@ -92,7 +92,6 @@ class MenuButton extends Component {
 
 const styles = StyleSheet.create({
   menuButton: {
-    backgroundColor: clrs.darkPrimaryColor,
     width:50,
     height:60
   },

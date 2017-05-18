@@ -3,7 +3,9 @@ import {
   Navigator,
   View,
   Text,
+  StatusBar,
 } from 'react-native';
+import LinearGradient from 'react-native-linear-gradient';
 import backAndroid from 'react-native-back-android';
 import clrs from '../utils/Clrs';
 
@@ -15,10 +17,6 @@ import Home from './Home';
 import Login from './Login';
 import CashFlow from './CashFlow';
 import Statements from './Statements';
-// import SearchPartner from './SearchPartner';
-// import History from './History';
-// import Rewards from './Rewards';
-// import ExpressInvite from './ExpressInvite';
 
 class MoneyManager extends Component {
 
@@ -106,18 +104,23 @@ class MoneyManager extends Component {
 	
 	render() {
 		return (
-			<Navigator
-				ref={this._setNavigatorRef}
-				initialRoute={{id: 'first'}}
-				renderScene={this.renderScene.bind(this)}
-				style={{backgroundColor: clrs.darkPrimaryColor}}
-				configureScene={(route) => {
-					if (route.sceneConfig) {
-						return route.sceneConfig;
-					}
-					return Navigator.SceneConfigs.FloatFromBottom;
-				}}
-			/>
+			<StatusBar
+				backgroundColor="blue"
+				barStyle="light-content"
+			/>,
+			<LinearGradient colors={clrs.pageArrayBackgroundColor} style={{flex:1}}>
+				<Navigator
+					ref={this._setNavigatorRef}
+					initialRoute={{statusBarHidden: true}}
+					renderScene={this.renderScene.bind(this)}
+					configureScene={(route) => {
+						if (route.sceneConfig) {
+							return route.sceneConfig;
+						}
+						return Navigator.SceneConfigs.FloatFromBottom;
+					}}
+				/>
+			</LinearGradient>
 		);
 	}
 };

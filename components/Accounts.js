@@ -17,6 +17,7 @@ import {
   Button,
   Divider,
 } from 'react-native-elements';
+import LinearGradient from 'react-native-linear-gradient';
 import clrs from '../utils/Clrs';
 import customerData from '../utils/customerData';
 import AccontSwiper from './AccontSwiper';
@@ -72,13 +73,14 @@ class Accounts extends Component{
 
   render(){
     return(
-      <View style={styles.page}>
-        <WelcomeBar customerInfo={this.state.customerInfo} />
+      <LinearGradient colors={clrs.pageArrayBackgroundColor} style={styles.page}>
+        {/*<WelcomeBar customerInfo={this.state.customerInfo} />*/}
         <CombinedAccountBalance accountsInfo={this.state.accountsInfo} />
+        
         <AccontSwiper accountsInfo={this.state.accountsInfo} navigator={this.props.navigator} setAccountId={this.setAccountId.bind(this)} />
         <PageFooter />
         <Spinner visible={this.state.visible} textContent={"Fetching data ..."} textStyle={{color: clrs.textPrimaryColor}} overlayColor={clrs.overlayColor} />
-     </View>
+     </LinearGradient>
     )
   }
 }
@@ -94,7 +96,6 @@ export default accounts;
 
 const styles = StyleSheet.create({
 	page: {
-		backgroundColor: clrs.pageBackgroundColor,
-    flex:1,
+		flex:1,
 	},
 })

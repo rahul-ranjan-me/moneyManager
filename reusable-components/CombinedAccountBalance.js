@@ -30,35 +30,29 @@ export default class Header extends Component{
 
   render(){
     return <View style={styles.container}>
-        <View>
-          <Text style={styles.textInfo}>You have {this.state.accountsInfo.length} accounts</Text>
-        </View>
-        <View style={{flexDirection:'row'}}>
-            <Text style={styles.combineBalanceLabel}>Your combined balance: </Text>
-            <Text style={styles.combineBalance}>£ {this.state.balance}</Text>
-        </View>
+        <Text style={styles.combineBalanceLabel}>COMBINED BALANCE</Text>
+        <Text style={styles.combineBalance}>£ {this.state.balance}</Text>
+        <Text style={{position:'absolute', right:15, bottom:-15, color:clrs.secondaryWhiteText, fontSize:15}}>Balance</Text>
     </View>
   }
 }
 
 const styles = StyleSheet.create({
 	container:{
-    backgroundColor:clrs.widgetBackgroundColor,
-    padding:15,
     marginTop:1,
-  },
-  textInfo:{
-    color:clrs.textPrimaryColor,
-    fontSize:13,
-    marginBottom:10
+    marginTop:15,
+    marginBottom:25,
   },
   combineBalanceLabel:{
-    color:clrs.textPrimaryColor,
-    fontSize:18,
+    color:clrs.primaryWhiteText,
+    fontSize:16,
+    alignSelf:'center',
   },
   combineBalance:{
-    color:clrs.textGreenColor,
-    fontSize:20,
-    marginLeft:20
+    color:clrs.textPrimaryColor,
+    fontSize:50,
+    alignSelf:'center',
+    textShadowColor:'#000',
+		textShadowOffset:{width:1, height:1}
   }
 })

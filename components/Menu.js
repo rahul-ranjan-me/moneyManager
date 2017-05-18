@@ -25,24 +25,6 @@ const list = [
 		key: 'aggregatedCashFlow',
 	},
 	{
-		name: 'USD',
-		icon: 'find-in-page',
-		subtitle: 'Search for a lunch partner',
-		key: 'search',
-	},
-	{
-		name: 'XMR',
-		icon: 'history',
-		subtitle: 'See lunches history',
-		key: 'history',
-	},
-	{
-		name: 'ETH',
-		icon: 'card-giftcard',
-		subtitle: 'Check/Redeem your reward points',
-		key: 'rewards',
-	},
-	{
 		name: 'Logout',
 		icon: 'block',
 		subtitle: 'See you again',
@@ -62,7 +44,7 @@ export default class Menu extends Component {
 				<View style={styles.appTitleView}>
 					<Text style={styles.appTitle}>Money Manager</Text>
 				</View>
-				<List containerStyle={{ marginTop:13, backgroundColor:clrs.textPrimaryColor}}>
+				<List containerStyle={{ marginTop:13, backgroundColor:'rgba(0,0,0,0)', borderBottomColor:'rgba(0,0,0,0)'}}>
 				  {
 				    list.map((l, i) => (
 				      <ListItem
@@ -70,6 +52,9 @@ export default class Menu extends Component {
 				        onPress={() => this.props.onItemSelected(l.key)}
 				        key={i}
 				        title={l.name}
+								containerStyle={{borderBottomColor:'rgba(255,255,255,0.1)'}} 
+								titleStyle = {{color:'#CAD1E2', textShadowColor:'#000', textShadowOffset:{width:1, height:1}}}
+								subtitleStyle = {{color:'#94A3C5'}}
 				        subtitle={l.subtitle}
 				      />
 				    ))
@@ -101,6 +86,8 @@ const styles = StyleSheet.create({
     fontSize:24,
     marginLeft:10,
 		flex:1,
-    color:clrs.textPrimaryColor
+    color:clrs.textPrimaryColor,
+		textShadowColor:'#000',
+		textShadowOffset:{width:1, height:1}
   },
 });
