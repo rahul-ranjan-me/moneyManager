@@ -31,7 +31,7 @@ export default class Header extends Component{
   render(){
     return <View style={styles.container}>
         <Text style={styles.combineBalanceLabel}>COMBINED BALANCE</Text>
-        <Text style={styles.combineBalance}>£ {this.state.balance}</Text>
+        <Text style={styles.combineBalance}>£ {String(this.state.balance)}</Text>
         <Text style={{position:'absolute', right:15, bottom:-15, color:clrs.secondaryWhiteText, fontSize:15}}>Balance</Text>
     </View>
   }

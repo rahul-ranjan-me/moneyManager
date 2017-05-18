@@ -74,7 +74,7 @@ export class SlideItem extends Component{
             />
           <Text style={styles.accountTitle}>{accountFriendlyName}</Text>
         </View>
-        <Text style={styles.accountBalance}>£ {accountBalance}</Text>
+        <Text style={styles.accountBalance}>£ {String(accountBalance)}</Text>
         <View style={styles.infoWrapper}>
           <Text style={styles.heading}>Sortcode: </Text>
           <Text style={styles.text}>{sortCode}</Text>
