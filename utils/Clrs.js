@@ -1,13 +1,13 @@
 export default {
   darkPrimaryColor: '#42145f',
   pageBackgroundColor: '#F3E5F5',
-  pageArrayBackgroundColor:['#4c669f', '#3b5998', '#192f6a'],
+  pageArrayBackgroundColor:['#212121', '#424242', '#616161'],
   primaryWhiteText : 'rgba(255,255,255,.7)',
   secondaryWhiteText: 'rgba(255,255,255,.5)',
-  primaryButtonBackground: "#4c669f",
+  primaryButtonBackground: "#212121",
   textGreenColor:'#37D4BC',
   scrollArrayBackgroundColor:['#4c669f', '#3b5998', '#192f6a'],
-  pageFooterColor:'#4c669f',
+  pageFooterColor:'#212121',
   blackBackgroundWithOpacity : 'rgba(0,0,0,.2)',
 
   primaryColor: '#9C27B0',

@@ -21,14 +21,12 @@ import LinearGradient from 'react-native-linear-gradient';
 import clrs from '../utils/Clrs';
 import PageFooter from '../reusable-components/PageFooter';
 import { hardwareBackPress } from 'react-native-back-android';
+let isAggregated = null
 
 class Statements extends Component{
     constructor(props){
         super(props);
-    }
-
-    manageBack(){
-        this.props.allTransactions.cashFlow ? this.props.navigator.replace({id: 'cashFlow'}) : this.props.navigator.replace({id: 'aggregatedCashFlow'});
+        isAggregated = this.props.allTransactions.cashFlow ? false : true;
     }
 
     createStatement(tran, i){
@@ -55,17 +53,9 @@ class Statements extends Component{
 
         return <LinearGradient 
                 start={{x: 0.0, y: 0.25}} end={{x: 0.7, y: 1.0}}
-                locations={[0,.1,0.7]}
+                locations={[0,.7,0.9]}
                 colors={clrs.pageArrayBackgroundColor} style={styles.page}>
 
-                <View style={{position:'absolute', top:10, right:20, zIndex:55}}>
-                    <Icon
-                        name='backward'
-                        type='font-awesome'
-                        size={40}
-                        onPress={this.manageBack.bind(this)}
-                        color={clrs.textPrimaryColor} />
-                </View>
                 <Text style={styles.pageLabel}>{label ? label : 'Others'}</Text>
                 <Text style={styles.pageSubLabel}>(Statement)</Text>
                 <ScrollView style={{marginTop:15}}>
@@ -78,7 +68,7 @@ class Statements extends Component{
 }
 
 const handleBackButtonPress = ({ navigator }) => {
-  console.log(navigator);
+  isAggregated ? navigator.replace({id: 'aggregatedCashFlow'}) : navigator.replace({id: 'cashFlow'});
   navigator.pop();
   return true;
 };
@@ -108,7 +98,7 @@ const styles = StyleSheet.create({
     statementContainer:{
         backgroundColor:clrs.blackBackgroundWithOpacity,
         borderBottomColor:'rgba(255,255,255,.2)', 
-        borderBottomWidth:1, padding:20,
+        borderBottomWidth:1, padding:10,
     },
     para:{
         flex:1,

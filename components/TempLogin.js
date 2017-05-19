@@ -34,7 +34,7 @@ class TempLogin extends Component {
 
 	updateStorage(){
 		this.setState({'visible':true});
-		this.state.jwtToken = this.state.jwtToken ? this.state.jwtToken : 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6Ilg1ZVhrNHh5b2pORnVtMWtsMll0djhkbE5QNC1jNTdkTzZRR1RWQndhTmsifQ.eyJleHAiOjE0OTUxODMwMzUsIm5iZiI6MTQ5NTE3OTQzNSwidmVyIjoiMS4wIiwiaXNzIjoiaHR0cHM6Ly9sb2dpbi5taWNyb3NvZnRvbmxpbmUuY29tL2Q1Zjg1NjgyLWY2N2EtNDQ0NC05MzY5LTJjNWVjMWEwZThjZC92Mi4wLyIsInN1YiI6IjQ4YmQzMzVkLTU2OTEtNDA0Ni04NDM4LTJiOTFjY2Y2NWVkNSIsImF1ZCI6IjQwOTU3YjljLTYzYmMtNGFiNC05ZWNiLTY3YjU0M2M4ZTRjYSIsIm5vbmNlIjoiZGVmYXVsdE5vbmNlIiwiaWF0IjoxNDk1MTc5NDM1LCJhdXRoX3RpbWUiOjE0OTUxNzk0MzUsIm9pZCI6IjQ4YmQzMzVkLTU2OTEtNDA0Ni04NDM4LTJiOTFjY2Y2NWVkNSIsIm5hbWUiOiJSYWh1bCIsImZhbWlseV9uYW1lIjoiUmFuamFuIiwiZ2l2ZW5fbmFtZSI6IlJhaHVsIFJhbmphbiIsImVtYWlscyI6WyJyYWh1bC5yYW5qYW5AcmJzLmNvbSJdLCJ0ZnAiOiJCMkNfMV9CbHVlQmFua1NVU0kifQ.FnWfmdE_unZzEpbLCWoHDdUlJ2ZZBGdB13mQeML5I2ybSjmgri9VrWd-kU_CqcptXW0rhEi8fXPtdN9EzH6SISFy2cD5izoS4ZY7UTIyYU-jORbikb14zmUUGuaCVh_LVkmAssIoc0m5IKcty4dk29wps_fPVSMb7A5y4s910cIUj3knXEXyBR6xPoVw9zRJDetQzL8lfdMV5nwepaWP0CGbY9CznuHfZVbDPrHQUO1Xy5nWzeqBTXsXkKgy5eWN_IA-9-_MSUVbOsFtSGevQelr1u3IFHNCUwc-_6Q92nyb2FxvHvaE6CO3F_HUAfTtiyZhVEDs0b2cniL__Sgv9Q';
+		this.state.jwtToken = this.state.jwtToken ? this.state.jwtToken : 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6Ilg1ZVhrNHh5b2pORnVtMWtsMll0djhkbE5QNC1jNTdkTzZRR1RWQndhTmsifQ.eyJleHAiOjE0OTUxOTYyNDAsIm5iZiI6MTQ5NTE5MjY0MCwidmVyIjoiMS4wIiwiaXNzIjoiaHR0cHM6Ly9sb2dpbi5taWNyb3NvZnRvbmxpbmUuY29tL2Q1Zjg1NjgyLWY2N2EtNDQ0NC05MzY5LTJjNWVjMWEwZThjZC92Mi4wLyIsInN1YiI6IjQ4YmQzMzVkLTU2OTEtNDA0Ni04NDM4LTJiOTFjY2Y2NWVkNSIsImF1ZCI6IjQwOTU3YjljLTYzYmMtNGFiNC05ZWNiLTY3YjU0M2M4ZTRjYSIsIm5vbmNlIjoiZGVmYXVsdE5vbmNlIiwiaWF0IjoxNDk1MTkyNjQwLCJhdXRoX3RpbWUiOjE0OTUxOTI2NDAsIm9pZCI6IjQ4YmQzMzVkLTU2OTEtNDA0Ni04NDM4LTJiOTFjY2Y2NWVkNSIsIm5hbWUiOiJSYWh1bCIsImZhbWlseV9uYW1lIjoiUmFuamFuIiwiZ2l2ZW5fbmFtZSI6IlJhaHVsIFJhbmphbiIsImVtYWlscyI6WyJyYWh1bC5yYW5qYW5AcmJzLmNvbSJdLCJ0ZnAiOiJCMkNfMV9CbHVlQmFua1NVU0kifQ.bjCUu1g9ZMcCx9J53lK-2Y3r0L2fRFyBU1Sd04g2t6j6T3-8pXda3GBD3HQ37xax6kJcdeHjlc7NWR79C0FOEE_XL5O2QO3-suo1dgMv1_pxFxtMYG_tRu1MikoHvbnsxzY65sCrZDH9Nh9twBmrANGrKtI-BlRhUcMUyj3JLb7NBy-RaTUoZQA8OoccVSEHwMQW2rGYoZZlqS9khOna0HIVf6lJu6e2cfU9guRZ7pDqL5TmBPAZWGB5Y_Xivcm9_aW84BS0jX-uLb0Pv499R9RavhtZfxEHmEna5U5XSCcXivvrXP5BE4LSLeFyOQ_fcmGbeYFzE1EwuYRsH5jxzA';
 		this.state.subscriptionKey = this.state.subscriptionKey ? this.state.subscriptionKey : 'aa4675945448463d85c52251104fbb56';
 
 		const headers = {
@@ -63,7 +63,7 @@ class TempLogin extends Component {
     return (
         <LinearGradient 
             start={{x: 0.0, y: 0.25}} end={{x: 0.7, y: 1.0}}
-            locations={[0,.1,0.7]}
+            locations={[0,.7,0.9]}
             colors={clrs.pageArrayBackgroundColor} style={styles.page}>
             <View style={styles.loginContainer}>
                 <Icon

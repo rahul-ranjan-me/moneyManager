@@ -7,7 +7,7 @@ export default {
   },
   width: 350,
   height: 350,
-  color: '#133b60',
+  color: '#2E7D32',
   r: 50,
   R: 150,
   legendPosition: 'bottomLeft',

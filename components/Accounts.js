@@ -59,7 +59,7 @@ class Accounts extends Component{
     return(
       <LinearGradient 
         start={{x: 0.0, y: 0.25}} end={{x: 0.7, y: 1.0}}
-        locations={[0,.1,0.7]}
+        locations={[0,.7,0.9]}
         colors={clrs.pageArrayBackgroundColor} style={styles.page}>
         {/*<WelcomeBar customerInfo={this.state.customerInfo} />*/}
         <CombinedAccountBalance accountsInfo={this.state.accountsInfo} />
@@ -72,7 +72,6 @@ class Accounts extends Component{
 }
 
 const handleBackButtonPress = ({ navigator }) => {
-  console.log(navigator);
   navigator.pop();
   return true;
 };

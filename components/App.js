@@ -104,11 +104,11 @@ class MoneyManager extends Component {
 	
 	render() {
 		return (
-			<StatusBar
-				backgroundColor="blue"
-				barStyle="light-content"
-			/>,
 			<LinearGradient colors={clrs.pageArrayBackgroundColor} style={{flex:1}}>
+				<StatusBar
+					backgroundColor="#212121"
+					barStyle="light-content"
+				/>
 				<Navigator
 					ref={this._setNavigatorRef}
 					initialRoute={{statusBarHidden: true}}

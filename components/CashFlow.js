@@ -22,6 +22,8 @@ import PageFooter from '../reusable-components/PageFooter';
 
 const {height, width} = Dimensions.get('window');
 
+let isAggregated = null
+
 class CashFlow extends Component {
     constructor(props){
         super(props);
@@ -36,6 +38,7 @@ class CashFlow extends Component {
         this.state = {
             transactionData:{}
         }
+        isAggregated = this.props.transactions ? false : true
     }
 
     calcTransactionPromise(allAccounts){
@@ -100,10 +103,6 @@ class CashFlow extends Component {
         .catch((error) => {
             console.error(error)
         })
-    }
-
-    manageBack(){
-        this.props.transactions ? this.props.navigator.replace({id: 'accounts'}) : this.props.navigator.replace({id: 'home'});
     }
 
     calcIncomeExpenseBiggestItem(type){
@@ -205,18 +204,9 @@ class CashFlow extends Component {
         return(
              <LinearGradient 
                 start={{x: 0.0, y: 0.25}} end={{x: 0.7, y: 1.0}}
-                locations={[0,.1,0.7]}
+                locations={[0,.7,0.9]}
                 colors={clrs.pageArrayBackgroundColor} style={styles.page}>
 
-                <View style={{position:'absolute', top:10, right:20,zIndex:55}}>
-                    <Icon
-                        name='backward'
-                        type='font-awesome'
-                        size={40}
-                        onPress={this.manageBack.bind(this)}
-                        color={clrs.textPrimaryColor} />
-                </View>
-               
                 <Text style={styles.pageLabel}>CASH FLOW</Text>
                 <Text style={styles.pageSubLabel}>({this.state.subtitle})</Text>
                  <ScrollView>
@@ -251,8 +241,9 @@ class CashFlow extends Component {
 }
 
 const handleBackButtonPress = ({ navigator }) => {
-  navigator.pop();
-  return true;
+    isAggregated ? navigator.replace({id: 'home'}) : navigator.replace({id: 'accounts'});
+    navigator.pop();
+    return true;
 };
 const cashflow = hardwareBackPress(CashFlow, handleBackButtonPress);
 
