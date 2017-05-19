@@ -8,11 +8,8 @@ import {
   TouchableOpacity
 } from 'react-native';
 import { 
-	Button,
-  Divider,
-  Icon,
+	Icon,
 } from 'react-native-elements';
-import LinearGradient from 'react-native-linear-gradient';
 import Swiper from 'react-native-swiper';
 import clrs from '../utils/Clrs';
 
@@ -37,14 +34,14 @@ export default class Header extends Component{
   render(){
     return (
       <ScrollView style={{flex:1}}>
-        <LinearGradient colors={clrs.scrollArrayBackgroundColor} style={styles.page}>
+        <View style={styles.page}>
           {this.state.accountsInfo.length > 0 ? <View>
              
               {this.state.accountsInfo.map((item, i) => (
-                <SlideItem style={styles.slide} item={item} navigator={this.props.navigator} setAccountId={this.setAccountId.bind(this)} key={i} />
+                <SlideItem item={item} navigator={this.props.navigator} setAccountId={this.setAccountId.bind(this)} key={i} />
               ))}
             </View> : null}
-        </LinearGradient>
+        </View>
       </ScrollView>
     )
   }
@@ -63,31 +60,34 @@ export class SlideItem extends Component{
     render(){
       const {id, sortCode, accountNumber, Iban, Bban, accountType, accountFriendlyName, accountBalance, accountCurrency} = this.props.item;
       
-      return <TouchableOpacity onPress={this.showHome.bind(this)} style={styles.accountContainer}>
-        <View>
-          <Icon
-            name='cube'
-            type='font-awesome'
-            size={20}
-            color={clrs.primaryWhiteText}
-            style={{position:'absolute', left:0, top:3}}
-            />
-          <Text style={styles.accountTitle}>{accountFriendlyName}</Text>
-        </View>
-        <Text style={styles.accountBalance}>£ {String(accountBalance)}</Text>
-        <View style={styles.infoWrapper}>
-          <Text style={styles.heading}>Sortcode: </Text>
-          <Text style={styles.text}>{sortCode}</Text>
-        </View>
-        <View style={styles.infoWrapper}>
-          <Text style={styles.heading}>Number: </Text>
-          <Text style={styles.text}>{accountNumber}</Text>
-        </View>
-        <View style={styles.infoWrapper}>
-          <Text style={styles.heading}>Type: </Text>
-          <Text style={styles.text}>{accountType}</Text>
-        </View>
-        </TouchableOpacity>
+      return  <TouchableOpacity onPress={this.showHome.bind(this)} style={styles.accountContainer}>
+          
+            <View>
+              <Icon
+                name='cube'
+                type='font-awesome'
+                size={20}
+                color={clrs.primaryWhiteText}
+                style={{position:'absolute', left:0, top:3}}
+                />
+              <Text style={styles.accountTitle}>{accountFriendlyName}</Text>
+            </View>
+            <Text style={styles.accountBalance}>£ {String(accountBalance)}</Text>
+            <View style={styles.infoWrapper}>
+              <Text style={styles.heading}>Sortcode: </Text>
+              <Text style={styles.text}>{sortCode}</Text>
+            </View>
+            <View style={styles.infoWrapper}>
+              <Text style={styles.heading}>Number: </Text>
+              <Text style={styles.text}>{accountNumber}</Text>
+            </View>
+            <View style={styles.infoWrapper}>
+              <Text style={styles.heading}>Type: </Text>
+              <Text style={styles.text}>{accountType}</Text>
+            </View>
+          
+          </TouchableOpacity>
+       
     }
 }
 
@@ -96,11 +96,12 @@ const styles = StyleSheet.create({
   accountContainer:{
     padding:15,
     width:width,
-    borderTopColor:clrs.secondaryWhiteText,
-    borderTopWidth:1
+    backgroundColor:'rgba(0,0,0,.2)',
+    borderBottomColor:'rgba(255,255,255,.2)',
+    borderBottomWidth:1
+    
   },
   infoWrapper:{
-    marginTop:5,
     flexDirection:'row'
   },
   accountTitle:{
@@ -110,19 +111,19 @@ const styles = StyleSheet.create({
     marginLeft:30,
   },
   accountBalance:{
-    fontSize:34,
+    fontSize:30,
     position:'absolute',
     right:15,
     color:clrs.textGreenColor,
-    marginTop:15,
+    marginTop:10,
   },
   text: {
     color: clrs.primaryWhiteText,
-    fontSize: 15,
-    fontWeight: 'bold',
+    fontSize: 13,
+    marginTop:2
   },
   heading:{
-    fontSize:17,
+    fontSize:14,
     fontWeight:'bold',
     color:clrs.secondaryWhiteText,
     width:90,

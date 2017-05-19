@@ -1,25 +1,9 @@
 import React, {Component} from 'react';
 import {
-  View,
-  Text,
   StyleSheet,
-  Image,
-  ScrollView,
-  Dimensions,
 } from 'react-native';
-import { 
-	Icon, 
-	SocialIcon,
-	ButtonGroup,
-  Grid,
-  Row,
-  Col,
-  Button,
-  Divider,
-} from 'react-native-elements';
 import LinearGradient from 'react-native-linear-gradient';
 import clrs from '../utils/Clrs';
-import customerData from '../utils/customerData';
 import AccontSwiper from './AccontSwiper';
 import WelcomeBar from '../reusable-components/WelcomeBar';
 import CombinedAccountBalance from '../reusable-components/CombinedAccountBalance';
@@ -73,10 +57,12 @@ class Accounts extends Component{
 
   render(){
     return(
-      <LinearGradient colors={clrs.pageArrayBackgroundColor} style={styles.page}>
+      <LinearGradient 
+        start={{x: 0.0, y: 0.25}} end={{x: 0.7, y: 1.0}}
+        locations={[0,.1,0.7]}
+        colors={clrs.pageArrayBackgroundColor} style={styles.page}>
         {/*<WelcomeBar customerInfo={this.state.customerInfo} />*/}
         <CombinedAccountBalance accountsInfo={this.state.accountsInfo} />
-        
         <AccontSwiper accountsInfo={this.state.accountsInfo} navigator={this.props.navigator} setAccountId={this.setAccountId.bind(this)} />
         <PageFooter />
         <Spinner visible={this.state.visible} textContent={"Fetching data ..."} textStyle={{color: clrs.textPrimaryColor}} overlayColor={clrs.overlayColor} />

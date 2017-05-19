@@ -23,14 +23,14 @@ export default class Header extends Component{
   combinedBalance(accInfo){
     var balance = 0;
     accInfo.map((acc) => {
-      balance += parseInt(acc.accountBalance);
+      balance += parseFloat(acc.accountBalance);
     });
     this.setState({balance: balance})
   }
 
   render(){
     return <View style={styles.container}>
-        <Text style={styles.combineBalanceLabel}>COMBINED BALANCE</Text>
+        <Text style={styles.pageLabel}>COMBINED BALANCE</Text>
         <Text style={styles.combineBalance}>£ {String(this.state.balance)}</Text>
         <Text style={{position:'absolute', right:15, bottom:-15, color:clrs.secondaryWhiteText, fontSize:15}}>Balance</Text>
     </View>
@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
     marginTop:15,
     marginBottom:25,
   },
-  combineBalanceLabel:{
+  pageLabel:{
     color:clrs.primaryWhiteText,
     fontSize:16,
     alignSelf:'center',

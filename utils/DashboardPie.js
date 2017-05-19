@@ -7,19 +7,18 @@ export default {
   },
   width: 350,
   height: 350,
-  color: '#2980B9',
+  color: '#133b60',
   r: 50,
   R: 150,
   legendPosition: 'bottomLeft',
   animate: {
     type: 'oneByOne',
-    duration: 200,
-    fillTransition: 3
+    duration: 1200,
+    fillTransition: 13
   },
   label: {
-    fontFamily: 'Arial',
-    fontSize: 15,
+    fontSize: 13,
     fontWeight: true,
-    color: '#ffffff'
+    color: 'rgba(255,255,255,.7)'
   } 
 }

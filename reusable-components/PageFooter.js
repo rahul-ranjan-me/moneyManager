@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
 	pageFooter:{
         backgroundColor:clrs.pageFooterColor,
         padding:10,
-        alignItems:'center'
+        alignItems:'center',
     },
     footerText:{
         fontSize:20,

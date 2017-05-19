@@ -5,24 +5,20 @@ import {
     StyleSheet,
     ScrollView,
     Dimensions,
-    Image,
 } from 'react-native';
 import clrs from '../utils/Clrs';
 import cashFlowData from '../utils/CashFlow';
 import { 
     Icon, 
-    SocialIcon,
-    ButtonGroup,
     Grid,
     Row,
     Col,
-    Button,
-    Divider,
 } from 'react-native-elements';
-import {GoogleSignin} from 'react-native-google-signin';
 import {icons} from '../utils/icons'
+import LinearGradient from 'react-native-linear-gradient';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { hardwareBackPress } from 'react-native-back-android';
+import PageFooter from '../reusable-components/PageFooter';
 
 const {height, width} = Dimensions.get('window');
 
@@ -145,7 +141,7 @@ class CashFlow extends Component {
         data.amount = Math.abs(data.amount);
         const totalWidth = parseInt(data.amount)/biggestItem*100
         adjustedWidth = ((Math.round(width*totalWidth/100))*60/100)+30,
-        color = type === 'income'? clrs.linkButtonColor : clrs.expenseColor;
+        color = type === 'income'? clrs.incomeColor : clrs.expenseColor;
         
         const getData = (data) => {
             this.getDetails(data, type);
@@ -155,7 +151,7 @@ class CashFlow extends Component {
         <Grid key={key} onPress={() => {getData(data)}}>
             <Col>
                 <View style={{marginLeft:15, marginTop:10, flex:1, flexDirection:'column'}} onPress={() => {getData(data)}}>
-                    <View style={{height:50, marginLeft:10, backgroundColor:'#666', marginTop:-10, width:5,}}><Text style={{height:50, width:5}}></Text></View>
+                    <View style={{height:50, marginLeft:10, backgroundColor:clrs.secondaryWhiteText, marginTop:-10, width:5,}}><Text style={{height:50, width:5}}></Text></View>
                         <View>
                             <Grid>
                                 <View style={{width:40, height:40, borderRadius:50, backgroundColor:color, position:'relative', zIndex:2, marginTop:-5}}>
@@ -176,9 +172,9 @@ class CashFlow extends Component {
                                         </View>
                                     </Col>
                                     <Col>
-                                        <View style={{marginTop:-10, marginLeft:5}}>
-                                        <Text style={{fontSize:20, color:color, fontSize:14}}>£ {data.amount.toFixed(2)}</Text>
-                                        <Text style={{fontWeight:'bold'}}>{data.label ? data.label: 'Others'}</Text>
+                                        <View style={{marginTop:-5, marginLeft:5}}>
+                                            <Text style={{fontSize:20, color:color, fontSize:14}}>£ {data.amount.toFixed(2)}</Text>
+                                            <Text style={{fontWeight:'bold', color:clrs.primaryWhiteText}}>{data.label ? data.label: 'Others'}</Text>
                                         </View>
                                     </Col>
                                     </Grid>
@@ -207,33 +203,35 @@ class CashFlow extends Component {
         const groups = this.state.transactionData;
 
         return(
-            <View style={styles.page}>
+             <LinearGradient 
+                start={{x: 0.0, y: 0.25}} end={{x: 0.7, y: 1.0}}
+                locations={[0,.1,0.7]}
+                colors={clrs.pageArrayBackgroundColor} style={styles.page}>
 
-                <View style={styles.pageHeader}>
-                    <Text style={styles.headerText}>Cashflow</Text>
-                    <Text>({this.state.subtitle})</Text>
-                    <View style={{position:'absolute', top:10, right:20}}>
-                        <Icon
+                <View style={{position:'absolute', top:10, right:20,zIndex:55}}>
+                    <Icon
                         name='backward'
                         type='font-awesome'
-                        size={50}
+                        size={40}
                         onPress={this.manageBack.bind(this)}
                         color={clrs.textPrimaryColor} />
-                    </View>
                 </View>
+               
+                <Text style={styles.pageLabel}>CASH FLOW</Text>
+                <Text style={styles.pageSubLabel}>({this.state.subtitle})</Text>
+                 <ScrollView>
 
-                <ScrollView>
-                    <View style={{ backgroundColor:clrs.textPrimaryColor, borderRadius:10, margin:15, padding:15}}>
+                    <View style={{ backgroundColor:clrs.blackBackgroundWithOpacity, borderRadius:10, margin:15, padding:15}}>
                         <Grid>
                         <Col>
-                            <Text style={{fontSize:20}}>Income</Text>
+                            <Text style={{fontSize:17, color:clrs.primaryWhiteText}}>Income</Text>
                             <Grid>
-                            <Text style={{fontSize:24, fontWeight:'bold', color:clrs.linkButtonColor}}>£ {incomeAmount}</Text>
+                            <Text style={{fontSize:24, fontWeight:'bold', color:clrs.incomeColor}}>£ {incomeAmount}</Text>
                             </Grid>
                         </Col>
                         <Col>
-                            <View style={{borderLeftColor:'#333', paddingLeft:15, borderLeftWidth:1, borderStyle:'dotted'}}>
-                            <Text style={{fontSize:20}}>Expense</Text>
+                            <View style={{borderLeftColor:'rgba(255,255,255,.2)', paddingLeft:15, borderLeftWidth:1, borderStyle:'dotted'}}>
+                            <Text style={{fontSize:17, color:clrs.primaryWhiteText}}>Expense</Text>
                             <Grid>
                                 <Text style={{fontSize:24, fontWeight:'bold', color:clrs.expenseColor}}>£ {expenseAmount}</Text>
                             </Grid>
@@ -241,24 +239,16 @@ class CashFlow extends Component {
                         </Col>
                         </Grid>
                     </View>
-
                     {Object.keys(groups).map((key, i) => {return this.callIncomeExpenseChart(key, i , 'income', biggestItem)})}
                     {Object.keys(groups).map((key, i) => {return this.callIncomeExpenseChart(key, i , 'expense', biggestItem)})}
 
-                    <View style={styles.pageFooter}>
-                        <Text style={styles.footerText}>All rights reserved</Text>
-                    </View>
                 </ScrollView>
                 <Spinner visible={this.state.visible} textContent={"Fetching cashflow ..."} textStyle={{color: clrs.textPrimaryColor}} overlayColor={clrs.overlayColor} />
-            
-            </View>
+                <PageFooter />
+            </LinearGradient>
         )
     }
 }
-
-
-
-
 
 const handleBackButtonPress = ({ navigator }) => {
   navigator.pop();
@@ -273,28 +263,19 @@ const styles = StyleSheet.create({
       flex: 1,
       //alignItems: 'center',
       flexDirection:'column',
-      backgroundColor: clrs.pageBackgroundColor
   },
-  pageHeader:{
-    backgroundColor:clrs.primaryColor,
-    padding:15,
-    marginTop:1,
-    alignItems:'center'
-  },
-  headerText:{
-    fontSize:24,
-    color: clrs.textPrimaryColor,
-    fontWeight:'bold'
-  },
-  pageFooter:{
-    backgroundColor:clrs.darkPrimaryColor,
-    padding:10,
+  pageLabel:{
+    color:clrs.primaryWhiteText,
+    fontSize:16,
+    alignSelf:'center',
+    textShadowColor:'#000',
     marginTop:15,
-    alignItems:'center'
+	textShadowOffset:{width:1, height:1}
   },
-  footerText:{
-    fontSize:20,
-    color: clrs.textPrimaryColor
+  pageSubLabel:{
+    color:clrs.secondaryWhiteText,
+    fontSize:14,
+    alignSelf:'center',
   },
   
 

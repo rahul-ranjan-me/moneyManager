@@ -8,6 +8,7 @@ export default {
   textGreenColor:'#37D4BC',
   scrollArrayBackgroundColor:['#4c669f', '#3b5998', '#192f6a'],
   pageFooterColor:'#4c669f',
+  blackBackgroundWithOpacity : 'rgba(0,0,0,.2)',
 
   primaryColor: '#9C27B0',
   lightPrimaryColor: '#D1C4E9',
@@ -21,6 +22,7 @@ export default {
  
   chartLegendTitle:'#AD1457',
   linkButtonColor:'#397af8',
-  expenseColor:'#EF6C00',
+  expenseColor:'#9E9D24',
+  incomeColor : '#2E7D32',
   overlayColor: 'rgba(60, 20, 95, .25)'
 }

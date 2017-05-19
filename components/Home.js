@@ -3,27 +3,21 @@ import {
 	View,
 	Text,
 	StyleSheet,
-  Image,
   ScrollView,
+  TouchableOpacity,
   Dimensions,
 } from 'react-native';
 import clrs from '../utils/Clrs';
 import accountData from '../utils/Accounts';
 import { 
 	Icon, 
-	SocialIcon,
-	ButtonGroup,
-  Grid,
-  Row,
-  Col,
-  Button,
-  Divider,
 } from 'react-native-elements';
+import LinearGradient from 'react-native-linear-gradient';
 import {Pie} from 'react-native-pathjs-charts';
 import pieOptions from '../utils/DashboardPie';
-import {GoogleSignin} from 'react-native-google-signin';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { hardwareBackPress } from 'react-native-back-android';
+import PageFooter from '../reusable-components/PageFooter';
 
 const {height, width} = Dimensions.get('window');
 
@@ -50,14 +44,6 @@ class Home extends Component {
       },
       'accountPieData': []
     }
-  }
-
-  bankAccountData(account, key){
-    return <View key={key} style={{padding:5, borderBottomColor:clrs.textPrimaryColor, borderBottomWidth:1}}>
-          <Text style={{color:clrs.textPrimaryColor, fontSize:15}}>{account.accountNumber} ({account.accountFriendlyName})</Text>
-          <Text style={{color:clrs.textGreenColor, fontSize:20, marginLeft:5,}}>£ {account.accountBalance}</Text>
-        </View>
-      
   }
 
   componentDidMount(){
@@ -122,140 +108,56 @@ class Home extends Component {
   }
 
   render() {
-    const {bankAccounts, cashInWallet, lastWithdrawal, upComingExpenses, totalExpenses, accountPie} = accountData;
-    const renderBankAccounts = this.state.accounts.map(this.bankAccountData);
-    let totalCash = this.state.accounts.reduce(function(acc, thisAccount) {
-      return acc + thisAccount.accountBalance;
-    }, 0);
-    //const user = GoogleSignin.currentUser();
     return (
-      <View style={styles.page}>
-
-        <View style={styles.pageHeader}>
-          {/*<Image
-            style={{width: 50, height: 50, borderRadius:10, position:'absolute', right:10, top:5}}
-            source={{uri: user.photo}}
-          />*/}
-          <Text style={styles.headerText}>Dashboard</Text>
-          <View style={{position:'absolute', top:10, right:20,}}>
-            <Icon
-              name='backward'
-              type='font-awesome'
-              size={40}
-              onPress={this.manageBack.bind(this)}
-              color={clrs.textPrimaryColor} />
-          </View>
+      <LinearGradient 
+        start={{x: 0.0, y: 0.25}} end={{x: 0.7, y: 1.0}}
+        locations={[0,.1,0.7]}
+        colors={clrs.pageArrayBackgroundColor} style={styles.page}>
+        <View style={{position:'absolute', top:10, right:20,zIndex:55}}>
+          <Icon
+            name='backward'
+            type='font-awesome'
+            size={40}
+            onPress={this.manageBack.bind(this)}
+            color={clrs.textPrimaryColor} />
         </View>
-
+        
         <ScrollView>
-          <View style={{marginLeft:5, marginBottom:-50}}>
-            <View style={{flex:1, flexDirection:'column', marginTop:10}}>
-              <Text style={{fontSize:20, textAlign:'center', fontWeight:'bold', color:clrs.black, width:width}}>Cash Flow</Text>
-              <Text style={{fontSize:14, textAlign:'center', color:clrs.black, width:width, marginBottom:-10}}>(Last one year)</Text>
-            </View>
-            <View style={{marginLeft:((width-350)/2)}}>
+          
+          <Text style={styles.pageLabel}>CASH FLOW</Text>
+          <Text style={styles.pageSubLabel}>(Last one year)</Text>
+          
+          <TouchableOpacity onPress={this.showCashFlow}>
+            
+            <View style={{marginLeft:((width-350)/2), marginBottom:-30}}>
               <Pie
                 data={this.state.accountPieData}
                 options={pieOptions}
                 accessorKey="population" />
             </View>
-          </View>
-          <Grid>
-            <Col size={1}>
-              <Grid>
-                <Col size={1}><View style={{backgroundColor:'#2980B9', width:10, height:10, marginLeft:10}}></View></Col>
-                <Col size={4}>
-                  <Text style={styles.chartLegendTitle}>Expenses</Text>
-                  <Grid>
-                    <Col>
-                      <Text style={styles.chartLegendText}>£ {Math.abs(this.state.accountPie.expenses).toFixed(2)}</Text>
-                    </Col>
-                  </Grid>
-                </Col>
-              </Grid>
-            </Col>
-            <Col size={1}>
-              <Grid>
-                <Col size={1}><View style={{backgroundColor:'#2980B9', width:10, height:10, marginLeft:10}}></View></Col>
-                <Col size={4}>
-                  <Text style={styles.chartLegendTitle}>Salary</Text>
-                  <Grid>
-                    <Col>
-                      <Text style={styles.chartLegendText}>£ {this.state.accountPie.salary.toFixed(2)}</Text>
-                    </Col>
-                  </Grid>
-                </Col>
-              </Grid>
-            </Col>
-            <Col size={1}>
-              <Grid>
-                <Col size={1}><View style={{backgroundColor:'#2980B9', width:10, height:10, marginLeft:10}}></View></Col>
-                <Col size={4}>
-                  <Text style={styles.chartLegendTitle}>Other Income</Text>
-                  <Grid>
-                    <Col>
-                      <Text style={styles.chartLegendText}>£ {this.state.accountPie.otherIncome.toFixed(2)}</Text>
-                    </Col>
-                  </Grid>
-                </Col>
-              </Grid>
-            </Col>
-          </Grid>
 
-          <Button
-            raised
-            icon={{name: 'angle-double-right', type: 'font-awesome'}}
-            iconRight={true}
-            buttonStyle={{margin:10}}
-            onPress={this.showCashFlow}
-            backgroundColor={clrs.linkButtonColor}
-            title='See cash flow (April 2017)' />
-
-          <Divider style={{ backgroundColor: 'blue' }} />
-
-          <View style={styles.balanceContainer}>
-              <View style={{flexDirection:'row', padding:15}}>
-                <Text style={{color:clrs.textPrimaryColor, fontSize:20, marginTop:10}}>Total Cash</Text>
-                <Text style={{color:clrs.textGreenColor, fontSize:30, marginLeft:10,}}>£ {totalCash}</Text>
-              </View>
-              <View style={{opacity:0.7, backgroundColor:clrs.darkPrimaryColor, padding:15}}>
-                {renderBankAccounts}
-              </View>
-          </View>
-
-          <View style={styles.balanceContainer}>
-            <View style={{padding:15}}>
-              <Grid>
-                <Col>
-                  <Text style={{fontSize:14, fontWeight:'bold', color:clrs.secondaryText, marginBottom:5}}>CASH IN WALLET</Text>          
-                  <Text style={{fontSize:20, color:clrs.textPrimaryColor, marginTop:-5}}>£ {cashInWallet}</Text>
-                </Col>
-                <Col>
-                  <Text style={{fontSize:14, fontWeight:'bold', color:clrs.secondaryText}}>LAST WITHDRAWAL</Text>          
-                  <Text style={{fontSize:20, color:clrs.textPrimaryColor, marginTop:-5}}>£ {lastWithdrawal}</Text>
-                </Col>
-              </Grid>
+            <View style={styles.categoryContainer}>
+              <Text style={styles.categoryLabel}>Salary</Text>
+              <Text style={styles.chartLegendText}>£ {this.state.accountPie.salary.toFixed(2)}</Text>
             </View>
-          </View>
 
-          <View style={styles.balanceContainer}>
-            <View style={{flexDirection:'row', padding:15}}>
-              <Text style={{color:clrs.textPrimaryColor, fontSize:20, marginTop:10}}>Upcoming expenses</Text>
-               <Text style={{color:clrs.textGreenColor, fontSize:30, marginLeft:10,}}>£ {upComingExpenses}</Text>
-            </View> 
-            <View style={{flexDirection:'row', opacity:0.7, backgroundColor:clrs.darkPrimaryColor, padding:15}}>
-              <Text style={{fontSize:30, color:'#fff'}}>{totalExpenses}</Text>
-              <Text style={{fontSize:18, color:'#fff', marginLeft:5, marginTop:10}}>Expenses</Text>
-              <Text style={{fontSize:18, color:clrs.linkButtonColor, marginLeft:5, marginTop:10}}>View All</Text>
+            <View style={styles.categoryContainer}>
+              <Text style={styles.categoryLabel}>Other Income</Text>
+              <Text style={styles.chartLegendText}>£ {this.state.accountPie.otherIncome.toFixed(2)}</Text>
             </View>
-          </View>
 
-          <View style={styles.pageFooter}>
-            <Text style={styles.footerText}>All rights reserved</Text>
-          </View>
+            <View style={styles.categoryContainer}>
+              <Text style={styles.categoryLabel}>Expense</Text>
+              <Text style={styles.chartLegendText}>£ {Math.abs(this.state.accountPie.expenses).toFixed(2)}</Text>
+            </View>
+
+          </TouchableOpacity>
+          
         </ScrollView>
+
         <Spinner visible={this.state.visible} textContent={"Loading account ..."} textStyle={{color: clrs.textPrimaryColor}} overlayColor={clrs.overlayColor} />
-      </View>
+        <PageFooter />
+      </LinearGradient>
     );    
   }
 }
@@ -273,81 +175,38 @@ const styles = StyleSheet.create({
 		flex: 1,
 		//alignItems: 'center',
     flexDirection:'column',
-		backgroundColor: clrs.pageBackgroundColor
 	},
-  pageHeader:{
-    backgroundColor:clrs.primaryColor,
-    padding:15,
-    marginTop:1,
-    alignItems:'center'
-  },
-  headerText:{
-    fontSize:24,
-    color: clrs.textPrimaryColor,
-    fontWeight:'bold'
-  },
-  pageFooter:{
-    backgroundColor:clrs.darkPrimaryColor,
-    padding:10,
+  pageLabel:{
+    color:clrs.primaryWhiteText,
+    fontSize:16,
+    alignSelf:'center',
+    textShadowColor:'#000',
     marginTop:15,
-    alignItems:'center'
+		textShadowOffset:{width:1, height:1}
   },
-  footerText:{
-    fontSize:17,
-    color: clrs.textPrimaryColor
+  pageSubLabel:{
+    color:clrs.secondaryWhiteText,
+    fontSize:14,
+    alignSelf:'center',
   },
-  verticalWidgetContainer:{
-    backgroundColor: clrs.widgetBackgroundColor,
-    padding:10,
-    margin:10,
-    marginBottom:0,
-    flexDirection:'row'
-  },
-  verticalWidgetContainerNoHeight:{
-    backgroundColor: clrs.widgetBackgroundColor,
-    padding:10,
-    margin:10,
-    marginBottom:0,
+  categoryContainer:{
     flexDirection:'row',
-    height:70
+    padding:15,
+    height:60,
+    backgroundColor:clrs.blackBackgroundWithOpacity,
+    borderBottomColor:'rgba(255,255,255,.2)',
+    borderBottomWidth:1
   },
-  horizontalWidget:{
-    borderRightColor:'#fff',
-    borderRightWidth:1,
-    borderStyle:'dotted',
-    padding:10,
-    paddingRight:20
-  },
-  horizontalRightWidget:{
-    padding:10,
-    paddingLeft:15
-  },
-  horizontalAlign:{
-    flex:1,
-    flexDirection:'row',
-  },
-  chartLegentSquare:{
-    backgroundColor:'#2980B9', 
-    width:10, 
-    height:10, 
-    marginLeft:15
-  },
-  chartLegendTitle:{
-    color:clrs.chartLegendTitle,
+  categoryLabel:{
     fontSize:15,
-    fontWeight:'bold',
-    marginTop:-5
+    color:clrs.primaryWhiteText
   },
   chartLegendText:{
-    color:clrs.black,
-    fontSize:16
+    fontSize:30,
+    position:'absolute',
+    right:15,
+    marginTop:5,
+    color:clrs.textGreenColor,
   },
-  balanceContainer:{
-    backgroundColor:clrs.widgetBackgroundColor,
-    borderBottomColor:clrs.textPrimaryColor,
-    borderBottomWidth:1,
-    position:'relative',
-    marginTop:5
-  }
 
 });
