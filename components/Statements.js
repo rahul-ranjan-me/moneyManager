@@ -34,7 +34,13 @@ class Statements extends Component{
 			body:null
 		}).then((response) => response.json())
 			.then((responseJson) => {
-				this.setState({'rules':responseJson.trainingData.result})
+                var rules = [];
+                responseJson.trainingData.result.map((rule) => {
+                    if(rules.indexOf(rule) === -1){
+                        rules.push(rule);
+                    }
+                });
+				this.setState({'rules':rules})
 			})
 			.catch((error) => {
 				alert('Error occured, please check subscription key or jwt token');
