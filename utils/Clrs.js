@@ -1,7 +1,7 @@
 export default {
   darkPrimaryColor: '#42145f',
   pageBackgroundColor: '#F3E5F5',
-  pageArrayBackgroundColor:['#212121', '#424242', '#616161'],
+  pageArrayBackgroundColor:['#0D47A1', '#1565C0', '#1976D2'],
   primaryWhiteText : 'rgba(255,255,255,.7)',
   secondaryWhiteText: 'rgba(255,255,255,.5)',
   primaryButtonBackground: "#212121",
@@ -9,6 +9,11 @@ export default {
   scrollArrayBackgroundColor:['#4c669f', '#3b5998', '#192f6a'],
   pageFooterColor:'#212121',
   blackBackgroundWithOpacity : 'rgba(0,0,0,.2)',
+  modalBackground: '#212121',
+  primaryOverlayButton: '#BF360C',
+  secondaryOverlayButton:'#424242',
+  expenseColor:'#9E9D24',
+  incomeColor : '#212121',
 
   primaryColor: '#9C27B0',
   lightPrimaryColor: '#D1C4E9',
@@ -22,7 +27,5 @@ export default {
  
   chartLegendTitle:'#AD1457',
   linkButtonColor:'#397af8',
-  expenseColor:'#9E9D24',
-  incomeColor : '#2E7D32',
   overlayColor: 'rgba(60, 20, 95, .25)'
 }

@@ -60,7 +60,7 @@ class CashFlow extends Component {
             })
         }
     }
-
+ 
     componentDidMount(){
         this.setState({visible:true});
         if(this.props.transactions){
@@ -156,7 +156,7 @@ class CashFlow extends Component {
                                 <View style={{width:40, height:40, borderRadius:50, backgroundColor:color, position:'relative', zIndex:2, marginTop:-5}}>
                                     <View style={{width:30, height:30, borderRadius:50, marginTop:5, marginLeft:5, paddingTop:5, backgroundColor:clrs.textPrimaryColor}}>
                                     <Icon
-                                        name={icons[data.label]}
+                                        name={icons[data.label]?icons[data.label]:icons['Other Account Transfer']}
                                         type='font-awesome'
                                         size={20}
                                         
