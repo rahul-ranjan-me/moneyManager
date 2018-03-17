@@ -25,6 +25,12 @@ const list = [
 		key: 'aggregatedCashFlow',
 	},
 	{
+		name: 'Set Preferences',
+		icon: 'av-timer',
+		subtitle: 'Click to set your budget target',
+		key: 'setPreferences',
+	},
+	{
 		name: 'Logout',
 		icon: 'block',
 		subtitle: 'See you again',

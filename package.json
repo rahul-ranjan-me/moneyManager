@@ -11,6 +11,7 @@
     "react-native": "0.43.4",
     "react-native-animated-linear-gradient": "^1.0.2",
     "react-native-azure-ad": "^0.2.2",
+    "react-native-azure-ad-2": "^1.0.5",
     "react-native-back-android": "^2.0.1",
     "react-native-elements": "^0.11.2",
     "react-native-google-sign-in": "0.0.14",

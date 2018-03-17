@@ -17,6 +17,7 @@ import Home from './Home';
 import Login from './Login';
 import CashFlow from './CashFlow';
 import Statements from './Statements';
+import SetPreferences from './SetPreferences';
 
 class MoneyManager extends Component {
 
@@ -68,6 +69,8 @@ class MoneyManager extends Component {
 					</PageMenu>;
 			case 'statement':
 				return <PageMenu navigator={nav}><Statements navigator={nav} allTransactions={this.state.allTransactions} customerInfo={this.state.customerInfo} headers={this.state.headers} /></PageMenu>;
+			case 'setPreferences':
+				return <PageMenu navigator={nav}><SetPreferences navigator={nav} /></PageMenu>;
 			default:
 				//return <PageMenu navigator={nav}><CashFlow navigator={nav} accountId={this.state.accountId} customerInfo={this.state.customerInfo} headers={this.state.headers}  /></PageMenu>;
 				return <TempLogin navigator={nav} setHeadersAndInfo={this.setHeadersAndInfo} />;
