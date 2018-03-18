@@ -5,6 +5,7 @@ import {
     StyleSheet,
     ScrollView,
     Dimensions,
+    AsyncStorage,
 } from 'react-native';
 import clrs from '../utils/Clrs';
 import cashFlowData from '../utils/CashFlow';
@@ -13,12 +14,14 @@ import {
     Grid,
     Row,
     Col,
+    CheckBox,
 } from 'react-native-elements';
 import {icons} from '../utils/icons'
 import LinearGradient from 'react-native-linear-gradient';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { hardwareBackPress } from 'react-native-back-android';
 import PageFooter from '../reusable-components/PageFooter';
+import _ from 'lodash';
 
 const {height, width} = Dimensions.get('window');
 
@@ -30,6 +33,7 @@ class CashFlow extends Component {
         this.totalAccounts = 0;
         this.currentCursor = 0;
         this.transactionCalculatedData = [];
+        this.getPreferences = this.getPreferences.bind(this);
         this.attributesXhr = {
 			method: 'GET',
 			headers : this.props.headers,
@@ -38,6 +42,7 @@ class CashFlow extends Component {
         this.state = {
             transactionData:{}
         }
+        this.myPreferences = {}
         isAggregated = this.props.transactions ? false : true
     }
 
@@ -60,9 +65,23 @@ class CashFlow extends Component {
             })
         }
     }
+
+    getPreferences(){
+        try {
+            AsyncStorage.getItem('preferences').then((value) => {
+                if (value !== null){
+                    this.myPreferences = value ? JSON.parse(value) : {}
+                }
+            })
+        } catch (error) {
+            console.log('error', error)
+            // Error retrieving data
+        }        
+    }
  
     componentDidMount(){
-        this.setState({visible:true});
+        this.setState({'visible':true})
+        this.getPreferences();
         if(this.props.transactions){
             this.calcTransactions(this.props.transactions.results, 'Last  year..');
         }else{
@@ -139,9 +158,21 @@ class CashFlow extends Component {
     createIncomeChart(data, type, biggestItem, key){
         data.amount = Math.abs(data.amount);
         const totalWidth = parseInt(data.amount)/biggestItem*100
-        adjustedWidth = ((Math.round(width*totalWidth/100))*60/100)+30,
-        color = type === 'income'? clrs.incomeColor : clrs.expenseColor;
+        adjustedWidth = ((Math.round(width*totalWidth/100))*60/100)+30
+
+        const adjustedWidthExpenses = parseInt(data.amount)/parseInt(this.myPreferences[data.label])*100,
+            adjustedWidthToApplyExpenses = adjustedWidthExpenses*(width-55)/100,
+            isShowExpenses = this.state.showExpense && type!=='income' && data.label && this.myPreferences[data.label]
         
+
+        let color = '';
+        if(type==='income'){
+            color = clrs.incomeColor
+            colorText = clrs.expenseColor
+        }else{
+            color = clrs.expenseColor
+            colorText = clrs.incomeColor
+        }
         const getData = (data) => {
             this.getDetails(data, type);
         }
@@ -150,11 +181,11 @@ class CashFlow extends Component {
         <Grid key={key} onPress={() => {getData(data)}}>
             <Col>
                 <View style={{marginLeft:15, marginTop:10, flex:1, flexDirection:'column'}} onPress={() => {getData(data)}}>
-                    <View style={{height:50, marginLeft:10, backgroundColor:clrs.secondaryWhiteText, marginTop:-10, width:5,}}><Text style={{height:50, width:5}}></Text></View>
+                    <View style={{height:70, marginLeft:10, backgroundColor:clrs.secondaryWhiteText, marginTop:-50, width:5,}}><Text style={{height:50, width:5}}></Text></View>
                         <View>
                             <Grid>
-                                <View style={{width:40, height:40, borderRadius:50, backgroundColor:color, position:'relative', zIndex:2, marginTop:-5}}>
-                                    <View style={{width:30, height:30, borderRadius:50, marginTop:5, marginLeft:5, paddingTop:5, backgroundColor:clrs.textPrimaryColor}}>
+                                <View style={{width:40, height:50, borderRadius:50, backgroundColor:color, position:'relative', zIndex:2, marginTop:-10}}>
+                                    <View style={{position:'absolute', zIndex:6, width:30, height:30, borderRadius:50, marginTop:8, marginLeft:5, paddingTop:5, backgroundColor:clrs.textPrimaryColor}}>
                                     <Icon
                                         name={icons[data.label]?icons[data.label]:icons['Other Account Transfer']}
                                         type='font-awesome'
@@ -165,18 +196,24 @@ class CashFlow extends Component {
                                 </View>
                             
                                 <View style={{left:20, position:'absolute'}}>
-                                    <Grid>
-                                    <Col>
-                                        <View style={{height:30, width:adjustedWidth, backgroundColor:color, borderBottomRightRadius:10, borderTopRightRadius:10}}>
-                                        </View>
-                                    </Col>
-                                    <Col>
-                                        <View style={{marginTop:-5, marginLeft:5}}>
-                                            <Text style={{fontSize:20, color:color, fontSize:14}}>£ {data.amount.toFixed(2)}</Text>
-                                            <Text style={{fontWeight:'bold', color:clrs.primaryWhiteText}}>{data.label ? data.label: 'Others'}</Text>
-                                        </View>
-                                    </Col>
-                                    </Grid>
+                                    <View style={{width:width-55, marginTop:-5, borderBottomRightRadius:10, borderTopRightRadius:10, height:40, backgroundColor: isShowExpenses ? clrs.widgetBackgroundColor : 'rgba(0,0,0,0)'}}>
+                                    </View>
+                                    <View style={{position:'absolute', zIndex:7, right:10, top:-5}}>
+                                        { isShowExpenses ? 
+                                            <View>
+                                                <Text style={{color:clrs.black, fontWeight:'bold'}}>Limit</Text>
+                                                <Text style={{color:clrs.textPrimaryColor}}>{this.myPreferences[data.label]}</Text>
+                                            </View> : undefined
+                                        }
+                                    </View>
+                                    <View style={{height:40, marginTop:-5, position:'absolute', left:14, zIndex:4, width: isShowExpenses ? adjustedWidthToApplyExpenses : adjustedWidth, backgroundColor:color, borderBottomRightRadius:10, borderTopRightRadius:10}}>
+                                    </View>
+                                
+                                    <View style={{marginTop:-5, marginLeft:5, position:'absolute', left:25, zIndex:5, width:width-200}}>
+                                        <Text style={{fontSize:20, color:colorText, fontSize:14}}>£ {data.amount.toFixed(2)}</Text>
+                                        <Text style={{fontWeight:'bold', color:clrs.primaryWhiteText}}>{data.label ? data.label: 'Others'}</Text>
+                                    </View>
+                                   
                                 </View>
 
                             </Grid>
@@ -188,13 +225,17 @@ class CashFlow extends Component {
     }
 
     callIncomeExpenseChart(key, i, type, biggestItem){
-        const groups = this.state.transactionData;
+        const groups = _.cloneDeep(this.state.transactionData);
         if(type ==='income' && groups[key].amount > 0){
             return this.createIncomeChart(groups[key], type, biggestItem, i)
         }else if(type ==='expense' && groups[key].amount < 1){
             return this.createIncomeChart(groups[key], type, biggestItem, i)
         }
         return undefined;
+    }
+
+    toogleExpense(){
+        this.setState({showExpense: !this.state.showExpense})
     }
 
     render() {
@@ -206,32 +247,37 @@ class CashFlow extends Component {
                 start={{x: 0.0, y: 0.25}} end={{x: 0.7, y: 1.0}}
                 locations={[0,.7,0.9]}
                 colors={clrs.pageArrayBackgroundColor} style={styles.page}>
-
+                
                 <Text style={styles.pageLabel}>CASH FLOW</Text>
                 <Text style={styles.pageSubLabel}>({this.state.subtitle})</Text>
-                 <ScrollView>
-
-                    <View style={{ backgroundColor:clrs.blackBackgroundWithOpacity, borderRadius:10, margin:15, padding:15}}>
+                <View style={{height:80, backgroundColor:clrs.blackBackgroundWithOpacity, borderRadius:10, margin:15, padding:15}}>
+                    <Grid>
+                    <Col>
+                        <Text style={{fontSize:17, color:clrs.primaryWhiteText}}>Income</Text>
                         <Grid>
-                        <Col>
-                            <Text style={{fontSize:17, color:clrs.primaryWhiteText}}>Income</Text>
-                            <Grid>
-                            <Text style={{fontSize:24, fontWeight:'bold', color:clrs.incomeColor}}>£ {incomeAmount}</Text>
-                            </Grid>
-                        </Col>
-                        <Col>
-                            <View style={{borderLeftColor:'rgba(255,255,255,.2)', paddingLeft:15, borderLeftWidth:1, borderStyle:'dotted'}}>
-                            <Text style={{fontSize:17, color:clrs.primaryWhiteText}}>Expense</Text>
-                            <Grid>
-                                <Text style={{fontSize:24, fontWeight:'bold', color:clrs.expenseColor}}>£ {expenseAmount}</Text>
-                            </Grid>
-                            </View>
-                        </Col>
+                        <Text style={{fontSize:24, fontWeight:'bold', color:clrs.incomeColor}}>£ {incomeAmount}</Text>
                         </Grid>
-                    </View>
+                    </Col>
+                    <Col>
+                        <View style={{height:50, borderLeftColor:'rgba(255,255,255,.2)', paddingLeft:15, borderLeftWidth:1, borderStyle:'dotted'}}>
+                        <Text style={{fontSize:17, color:clrs.primaryWhiteText}}>Expense</Text>
+                        <Grid>
+                            <Text style={{fontSize:24, fontWeight:'bold', color:clrs.expenseColor}}>£ {expenseAmount}</Text>
+                        </Grid>
+                        </View>
+                    </Col>
+                    </Grid>
+                </View>
+                <CheckBox
+                    style={{marginTop:-5, marginBottom:5, backgroundColor:'rgba(0,0,0,.5)', padding:10, margin:15, borderRadius:10}}
+                    textStyle = {{color:clrs.primaryWhiteText}}
+                    title='See expenses against limits'
+                    onPress={this.toogleExpense.bind(this)}
+                    checked={this.state.showExpense}
+                    />
+                <ScrollView>
                     {Object.keys(groups).map((key, i) => {return this.callIncomeExpenseChart(key, i , 'income', biggestItem)})}
                     {Object.keys(groups).map((key, i) => {return this.callIncomeExpenseChart(key, i , 'expense', biggestItem)})}
-
                 </ScrollView>
                 <Spinner visible={this.state.visible} textContent={"Fetching cashflow ..."} textStyle={{color: clrs.textPrimaryColor}} overlayColor={clrs.overlayColor} />
                 <PageFooter />

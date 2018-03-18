@@ -102,7 +102,7 @@ class Statements extends Component{
                 start={{x: 0.0, y: 0.25}} end={{x: 0.7, y: 1.0}}
                 locations={[0,.7,0.9]}
                 colors={clrs.pageArrayBackgroundColor} style={styles.page}>
-                <Text style={styles.pageLabel}>Set target per category</Text>
+                <Text style={styles.pageLabel}>Set limit per category</Text>
                 <ScrollView style={{paddingBottom:50}}>
                     <LinearGradient 
                         start={{x: 0.0, y: 0.25}} end={{x: 0.7, y: 1.0}}
